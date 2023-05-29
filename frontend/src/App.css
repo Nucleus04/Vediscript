@@ -1,5 +1,6 @@
 .App{
-  background-color: aquamarine;
-  height: 500PX;
-  width: 300PX;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
 }

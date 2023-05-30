@@ -32,3 +32,6 @@ input:focus {
 .text-red {
     color: rgb(253, 86, 86);
 }
+.display-none {
+    display: none;
+}

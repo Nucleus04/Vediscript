@@ -1,4 +1,4 @@
-export const submitData = async(formData) => {
+export const submitData = async(formData, onResponse, onError) => {
     try {
         const response = await fetch ("http://localhost:5000/signin", {
         method: "POST",
@@ -9,11 +9,13 @@ export const submitData = async(formData) => {
         });
 
         if(response.ok) {
-            console.log("Yes I connect to the back end");
+            const data = await response.json();
         } else {
-            console.log("Something went wrong");
+            onError();
         }
     } catch (error) {
         console.log("Login Error: ", error);
+    } finally {
+        onResponse();
     }
 }

@@ -4,7 +4,7 @@ import validateInputData from "./module/sanitizeData-module";
 import submitSignupData from "./module/submit-module";
 
 
-function SignUp () {
+function SignUp ({onLoadingChange}) {
     const [formData, setformData] = useState({
         name: "",
         email: "",
@@ -18,9 +18,16 @@ function SignUp () {
         confirmpassword: ""
         
     });
-
+    const [isLoading, setIsLoading] = useState(false);
     const [confirmpassword, setconfirmpassword] = useState("");
-   
+    const [isThereResponse, setIsThereResponse] = useState(false);
+    const [isResponseOk, setIsResponseOk] = useState(true);
+   const [isError, setIsError] = useState(true);
+
+    useEffect(() => {
+        onLoadingChange(isLoading);
+    },[isLoading]);
+
     useEffect (() => {
         const errors = validateInputData(formData, confirmpassword);
         setErrors(errors);
@@ -34,15 +41,36 @@ function SignUp () {
             setformData ({...formData, [e.target.name] : e.target.value});
         }
     }
+    const onResponse = () => {
+        setIsLoading(false);
+    }
+    const onResponseStatus = (status) => {
+        setIsThereResponse(true);
+        if (status === "failed") {
+            setIsResponseOk(false);
+        } else {
+            setIsResponseOk(true);
+        }
+
+    }
 
     const handleSubmit = async(event) => {
         event.preventDefault();
-        submitSignupData(formData);
+        setIsThereResponse(false);
+        setIsResponseOk(true);
+        setIsLoading(true);
+        submitSignupData(formData, onResponse, onResponseStatus);
     }
       
     return (
         
         <form method="post" onSubmit={handleSubmit}>
+            <div className={`warning ${isThereResponse && !isResponseOk? `red`: `display-none`}`}>
+                    <p>Something went wrong</p>
+            </div>
+            <div className={`warning ${isThereResponse && isResponseOk? `green`: `display-none`}`}>
+                    <p>Account successfully created</p>
+            </div>
             <div className="form-group">
                 <label htmlFor="name">Name: <span className="text-red">{errors.name? "Please enter a valid name." : ""}</span></label>
                 <input 

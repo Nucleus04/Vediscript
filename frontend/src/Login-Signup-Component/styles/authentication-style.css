@@ -4,6 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 .signup-container {
     background-color: rgb(255, 255, 255);
@@ -30,4 +31,24 @@
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
+}
+.blur-effect {
+    background-color: rgba(140, 140, 140, 0.2);
+}
+.red {
+    background-color: rgb(255, 102, 102);
+}
+.green {
+    background-color: #4bff81;
+}
+.warning {
+    height: 40px;
+    width: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.warning p{
+    font-size: 10pt;
 }

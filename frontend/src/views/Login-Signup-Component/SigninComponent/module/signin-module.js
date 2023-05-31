@@ -1,4 +1,4 @@
-export const submitData = async(formData, onResponse, onError) => {
+export const submitData = async(formData, onResponse, onError, onLogin) => {
     try {
         const response = await fetch ("http://localhost:5000/signin", {
         method: "POST",
@@ -10,6 +10,10 @@ export const submitData = async(formData, onResponse, onError) => {
 
         if(response.ok) {
             const data = await response.json();
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('userData', JSON.stringify(data.userData));
+            console.log("I successfully wirte token", localStorage.getItem("authToken"));
+            onLogin();
         } else {
             onError();
         }

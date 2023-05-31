@@ -6,7 +6,7 @@ import { useState } from "react";
 
 function AuthenticationPage () {
     const [isLoading, setIsLoading] = useState(true);
-    const [ isLogin, setisLogin ] = useState(false);
+    const [ isLogin, setisLogin ] = useState(true);
 
     const loginChecker = () => {
         isLogin? setisLogin(false) : setisLogin(true);

@@ -14,11 +14,14 @@ input:focus {
   
 }
 .submit-button {
-    height: 30px;
+    height: 37px;
     width: 120px;
-    background-color: #74E39A;
-    border-width: 1px;
+    background-color: #3BD16F;
+    border-width: 0px;
     border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    font-family: inherit;
 }
 .button-container {
     display: flex;
@@ -27,11 +30,15 @@ input:focus {
     margin-top: 30px;
 }
 .submit-button:hover {
-    background-color: #3BD16F;
+    background-color: #38bb66;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
 }
 .text-red {
     color: rgb(253, 86, 86);
 }
 .display-none {
     display: none;
+}
+.small-letters{
+    font-size: 8pt;
 }

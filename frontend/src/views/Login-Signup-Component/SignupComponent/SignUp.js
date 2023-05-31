@@ -55,6 +55,7 @@ function SignUp ({onLoadingChange}) {
     }
 
     const handleSubmit = async(event) => {
+
         event.preventDefault();
         setIsThereResponse(false);
         setIsResponseOk(true);
@@ -97,6 +98,7 @@ function SignUp ({onLoadingChange}) {
             </div>
             <div className="form-group">
                 <label htmlFor="password">Password: <span className="text-red">{errors.password? errors.password : ""}</span></label>
+                <p className="small-letters">Note: It should contain 1 Uppercase, 1 lowercase, 1 number and 8 characters long.</p>
                 <input 
                 className="input-field" 
                 type="password" 

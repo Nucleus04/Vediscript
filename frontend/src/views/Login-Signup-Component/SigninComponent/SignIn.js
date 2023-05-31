@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { submitData } from "./module/signin-module";
+import { Link, useNavigate } from "react-router-dom";
+
+
 
 function SignIn ({onLoadingChange, onErrorChange}) {
+    const navigate = useNavigate();
     const [formData, setformData] = useState({
         email: "",
         password: ""
@@ -24,13 +28,17 @@ function SignIn ({onLoadingChange, onErrorChange}) {
     const onErrorResponse = () => {
         setIsError(true);
     }
+    const onLogin = () => {
+        console.log("I will now Login");
+        navigate("/project-preview");
+    }
     const handleSubmit = async(event) => {
         event.preventDefault();
         setIsLoading(true);
         setIsError(false);
-        submitData(formData, onResponse, onErrorResponse);
+        submitData(formData, onResponse, onErrorResponse, onLogin);
     }
-
+    //localStorage.removeItem("authToken");
     return (
         <form method="post" onSubmit={handleSubmit}>
             <div className={`warning red ${isError? ``: `display-none`}`}>

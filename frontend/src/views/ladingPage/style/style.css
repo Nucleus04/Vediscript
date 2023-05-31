@@ -23,13 +23,18 @@
     .get-started-button {
         animation: slideUp 1s ease-in-out;
         background-color: #3BD16F;
-        border-radius: 15px;
-        border-width: 1px;
+        border-radius: 9px;
+        border-width: 0px;
         width: 150px;
         height: 50px;
+        color: white;
+        font-weight: 600;
+        font-family: inherit;
     }
     .get-started-button:hover{
-        scale: 1.05;
+        scale: 1.010;
+        background-color: #38bb66;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
         transition: 0.25s;
     }
     @keyframes slideUp {

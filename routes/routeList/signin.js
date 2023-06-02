@@ -15,12 +15,15 @@ module.exports = () => {
             const isPasswordCorrect = await user.checkPassword(password);
           
             if(isPasswordCorrect) {
+
                 const token = user.generateToken(isUserExist);
-                console.log(token);
                 const userData  = {
                     email: isUserExist.email,
                     name: isUserExist.name,
+                    _id: isUserExist._id,
+                    projects: isUserExist.projects,
                 }
+           
                 res.json({
                     token,
                     userData,

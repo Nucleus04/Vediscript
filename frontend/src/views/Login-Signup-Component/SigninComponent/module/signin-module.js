@@ -12,7 +12,6 @@ export const submitData = async(formData, onResponse, onError, onLogin) => {
             const data = await response.json();
             localStorage.setItem('authToken', data.token);
             localStorage.setItem('userData', JSON.stringify(data.userData));
-            console.log("I successfully wirte token", localStorage.getItem("authToken"));
             onLogin();
         } else {
             onError();

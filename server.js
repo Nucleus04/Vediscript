@@ -5,10 +5,9 @@ const route = require("./routes")
 const connectToMongoDb = require("./models/dbConnection");
 const config = require("./config");
 
+
 const app = express();
 const port = process.env.PORT || config.PORT;
-
-
 app.use(cors());
 
 app.use(bodyparser.urlencoded({extended : true})); 

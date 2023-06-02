@@ -1,5 +1,5 @@
-import ProjectPreviewLayout from '../views/projectPreview/projectPreviewLayout';
-import { BrowserRouter as Router, Route, Link,Navigate, Routes } from 'react-router-dom';
+import ProjectPreviewLayout from "../views/Homepage/ProjectPreviewPage/components/ProjectPreviewLayout/projectPreviewLayout";
+import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 import AuthenticationPage from '../views/Login-Signup-Component/Authentication-page';
 import LandingPage from '../views/ladingPage/LandingPage';
 import session from '../session/session';

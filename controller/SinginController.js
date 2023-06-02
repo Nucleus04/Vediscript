@@ -1,4 +1,6 @@
 const UserModel = require("../models/User");
+const ProjectModel = require("../models/Project");
+const ProjectController = require("./ProjectController");
 const bcrypt = require("bcrypt");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
@@ -13,6 +15,10 @@ class UserLogin {
         try {
             const user = await UserModel.findOne({email: this.email});
             if(user) {
+                const project = new ProjectController();
+                const projectList = await project.get(user._id);
+                console.log("This is the project List", projectList)
+                user.projects = projectList;
                 return user;
             } else {
                 return false;
@@ -36,7 +42,6 @@ class UserLogin {
         const token = jwt.sign({userId: user._id}, key);
         return token;
     }
-
 
 }
 

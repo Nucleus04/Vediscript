@@ -1,0 +1,59 @@
+.project-container {
+    width: 150px;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+.project-button {
+    height: 150px;
+    width: 100%;
+    border-radius: 7px;
+    border-width: 0px;
+    text-align: justify;
+    font-family: inherit;
+    font-size: 8pt;
+    flex-wrap: wrap;
+    font-weight: 600;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+}
+.project-button:hover {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+.project-label {
+    font-size: 10pt;
+}
+.menu-button-projects {
+    margin-left: 120px;
+    margin-top: 6px;
+    position: relative;
+}
+.menu-button-projects:hover {
+    transform: scale(1.05);
+}
+.project-description-display {
+    margin-top: 70px;
+    color: rgb(109, 109, 109);
+    margin-left: 6px;
+    margin-right: 6px;
+}
+.more-menu-project {
+    width: 100px;
+    height: 97px;
+    background-color: rgba(248, 248, 248, 0.9);
+    position: absolute;
+    transform: translate(120%,0px);
+    border-radius: 7px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+.menu-button{
+    display: block;
+    margin: auto;
+    width: 70px;
+    margin-top: 15px;
+    height: 25px;
+    border-radius: 5px;
+    border-width: 0;
+    font-family: inherit;
+    font-weight: 600;
+    color: white;
+}

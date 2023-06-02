@@ -29,7 +29,6 @@ function SignIn ({onLoadingChange, onErrorChange}) {
         setIsError(true);
     }
     const onLogin = () => {
-        console.log("I will now Login");
         navigate("/project-preview");
     }
     const handleSubmit = async(event) => {

@@ -31,7 +31,7 @@ const validateInputData = (formData, confirmpassword) => {
     else {
         errors.password = "";
     }
-    if (confirmpassword && confirmpassword != formData.password){
+    if (confirmpassword && confirmpassword !== formData.password){
         errors.confirmpassword = 'Password does not match';
     }
     else {

@@ -17,7 +17,6 @@ class UserLogin {
             if(user) {
                 const project = new ProjectController();
                 const projectList = await project.get(user._id);
-                console.log("This is the project List", projectList)
                 user.projects = projectList;
                 return user;
             } else {

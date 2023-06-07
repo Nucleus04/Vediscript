@@ -12,8 +12,7 @@ function ProfileComponent () {
     }
 
     const logout = () => {
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("userData");
+        localStorage.clear();
         navigate("/authentication");
     }
 

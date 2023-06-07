@@ -1,0 +1,45 @@
+.transcription-container {
+    width: 90%;
+    height: 90%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.transcription-container-inside{
+    overflow: auto;
+    width: 90%;
+    height: 90%;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.transcription-container-inside::-webkit-scrollbar {
+    width: 8px;
+}
+.transcription-container-inside::-webkit-scrollbar-track {
+    background: #a0eda3; 
+}
+.transcription-container-inside::-webkit-scrollbar-thumb {
+    background: #5db24a;
+    border-radius: 4px;
+}
+.transcription-container-inside::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.uplaod-button {
+    height: 30px;
+    width: 120px;
+    border: none;
+    border-radius: 7px;
+    background-color: rgb(84, 185, 79);
+    color: white;
+    font-family: inherit;
+    font-weight: 600;
+}
+.uplaod-button:hover{
+    background-color: rgb(70, 155, 66);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}

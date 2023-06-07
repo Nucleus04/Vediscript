@@ -1,0 +1,42 @@
+
+.audio-button-relativity{
+    position: relative;
+}
+.audio-modal{
+    position: absolute;
+    width: 150px;
+    height: 100px;
+    transform: translate(-5px, 5px);
+    display: flex;
+    justify-content: center;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    border-radius: 10px;
+}
+.audio-child-button{
+    width: 100%;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 11pt;
+    margin-top: 5px;
+    border-radius: 5px;
+    text-align: start;
+    border: none;
+    font-family: inherit;
+    font-weight: 600;
+    color: inherit;
+    background-color: white;
+}
+.audio-child-button:hover{
+    background-color: rgb(226, 226, 226);
+}
+.audio-child-button p{
+    margin-left: 3px;
+}
+.audio-modal-button-container{
+    width: 85%;
+
+}
+.display-none {
+    display: none;
+}

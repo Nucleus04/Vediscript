@@ -10,7 +10,7 @@
     background-color: rgb(235, 235, 235);
     display: flex;
     align-items: center;
-
+     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 .logo-appname {
     width: 200px;

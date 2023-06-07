@@ -10,8 +10,8 @@ class Project {
     add () {
         const data = {
             userId : this.projectDetails.id,
-            projectName : this.projectDetails.projectData.projectName[0],
-            projectDescription: this.projectDetails.projectData.projectDescription[0],
+            projectName : this.projectDetails.projectData.projectName,
+            projectDescription: this.projectDetails.projectData.projectDescription,
         }
         const project = new ProjectModel(data);
         try {
@@ -27,6 +27,27 @@ class Project {
         try {
             const projects = await ProjectModel.find({userId: id});
             return projects;
+        } catch (error) {
+            throw(error);
+        }
+    }
+    async edit (projectId) {
+        try {
+            const updatedDetail = {
+                userId : this.projectDetails.id,
+                projectName : this.projectDetails.projectData.projectName,
+                projectDescription: this.projectDetails.projectData.projectDescription,
+            }
+
+            const update = await ProjectModel.findByIdAndUpdate(projectId, updatedDetail);
+            return update;
+        } catch (error) {
+            throw(error);
+        }
+    }
+    async delete (projectId) {
+        try {
+            await ProjectModel.deleteOne({_id: projectId});
         } catch (error) {
             throw(error);
         }

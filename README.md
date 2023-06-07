@@ -15,3 +15,4 @@ word highlights,
 Redo, Undo function,
 Import audio,
 Download finished 
+

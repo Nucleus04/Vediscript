@@ -1,0 +1,34 @@
+.relative{
+    position: relative;
+}
+.absolute {
+    position: absolute;
+}
+.text-modal{
+    background-color: aquamarine;
+    width: 150px;
+    height: 65px;
+    transform: translate(-10px, 5px);
+    display: flex;
+    justify-content: center;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    border-radius: 10px;
+}
+.text-modal-button-container{
+    width: 85%;
+}
+.text-edit-button {
+    width: 100%;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 11pt;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+.text-edit-button:hover {
+    background-color: rgb(226, 226, 226);
+}
+.display-none {
+    display: none;
+}

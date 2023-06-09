@@ -5,6 +5,10 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    background-image: url("../../../../public/abstract-background.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .signup-container {
     background-color: rgb(255, 255, 255);

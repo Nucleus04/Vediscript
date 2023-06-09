@@ -23,3 +23,4 @@ export const setEditingProjectDetailState = (value) => {
         payload: value,
     }
 }
+

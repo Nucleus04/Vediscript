@@ -16,3 +16,9 @@ Redo, Undo function,
 Import audio,
 Download finished 
 
+
+multer- video uploading tool
+
+
+google cloud speech to text
+IBM watson

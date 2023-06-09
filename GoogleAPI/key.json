@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ordinal-skyline-389215",
+  "private_key_id": "f38e5e1f58537daa932e59d58c07cf4b13e2036f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCq0h6FC5eAN42S\nDgJxIEDBF5bJz9+X3Aog/SVFAwmLM/hCJlOGZjrVg5zxiQyRF35sdf/zjKEioBtV\nK0ATHDkH2Z+wqSkxBbVPTTu2a8TZBlqP6Ll5QGB8D8g/XmzYe6/jDbMCk3K0gv+g\nHge2E0/b/vskpnKS/a/Z9/7kPaBPSAaIqYC4lmh9DX+xcsp7HJMze5RpQDPb3BmZ\nb9l4yI0L6RKRr6xzFPklHunNkOmQN3dk+Mgayoxat1BZjuktuubBPfHgT+5ixH5k\nkentexyfj1j6gABmgIpZ8BBDJrYoRvFi1sL4fORmJRCETLqqBaTAyYVJliXt2RNt\nIaKB1DupAgMBAAECggEAPR01rBXsmwPFE6cNepm2cR7WZNeJQFSKDyliZyFiDbqH\nLGt34JK8o90Vjlig9Vv5cCZ7bxA2KiQsAzmZD/097jAO8O5kfVR0fK2+GlLON3MN\nfYUermG440nmM729pWoDEHG7RMWp+SkQ+aEk0yBvpt6/zWn7fdljS9FtEQ13SEV/\n0+O7NtTm5FUUfuyVp3z0G3A/Y2jpsQ/U6puM2GBX4T1i3IuhelE3dmbASRR7nUsk\n6PTQo45oAxh6J5mIyxhbUenf/MziwwnxsIxUOmX5p8wtWkrtgWOWkjup38lSgvzL\nSY+6HuMSU5wFbhs78OmJpaMtLwedJFd/6UAkuqhLjQKBgQDXzZV3ZnBb9O/9JKMi\nIwDqA8+cne+uRXLu3Eo1NUVgVgzXbSIh0pazoVux/sf7u48Sg8rQOZrT5IEPCWDF\n6J1ODj9dBMgk7dFOvIlLY2Url5bP9FnGT994ce6P8v7riYQ/962gI9+pXFKIkU1o\nUdyILI1pimhK65/LCwKizMFx9wKBgQDKo5ZHau6IX++7TZJjl1nNDyzZSA1aCPLH\n28SCDsOqeKOIEAKjr1LUjD5j3Vz+oBmaY4kTEqrZq2lDLewT/9lBMozWGPrLJmV7\nNIpRzE14mvyd9ceiKyS+jvF2DlPEU+85vWhbLEC30MVRzePRblzyAcS9v9jrrmtU\nRqZzZjBXXwKBgQCGe6ZefyccFzsLbS6AUoH6U5+owT+hQcRLGFriZ60xSM693VO8\n8ihaDv8+oEDuHkcdyaW1N4DF9Yt73GNDUh/dicFw7U7wvIeIYrPImEtu7Ave0i60\nCAiCXbXGXS8Bh3Q0DNxVhKWYPGFum+Y6UXF2JxWFJOyza7zr4pOk8qbGpwKBgEBX\nStsoV87Tb2Iwkj+vCeNzYxEmsJ6a4sOUw0NsfrI9FeeY9c2VWJ6GXTUGT4XFvfto\niViV/8uXgpfDGAeNoCT0cQV17wPcEDLbjuPEFAEsbPOW26lhO4yKBJ8wk2ZuJDJY\nMq9oULBMyKpdzm1sNnTdHOQG61CCFDAxMp7HnqfPAoGAc5er/eObGrvlXTb1sbqp\n/jLcYl9dP2LI0HFQ1nDCpZ2cLPtQL5GodDimOnnhvkF7GHAD2XBlEM/D0FC59RDW\nraLQTSWWsFT4DOweDSB9oHh31LIq9/3TSs6GFbM2v3b2O7JyP/EugdD80KdFW+n0\nsShm3dQLvptex0uXOKq0MKA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "vediscript@ordinal-skyline-389215.iam.gserviceaccount.com",
+  "client_id": "107859838600018678290",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vediscript%40ordinal-skyline-389215.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

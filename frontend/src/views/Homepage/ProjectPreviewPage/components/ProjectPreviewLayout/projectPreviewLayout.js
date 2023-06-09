@@ -6,11 +6,14 @@ import NewProjectFormComponent from "../NewProjectFormComponent.js/NewProjectFor
 import { retrieveProject } from "./module/retrieveProjectList";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import socket from "../../../../../websocket/socket";
 
 function ProjectPreviewLayout () {
     const [projectList, setProjectList] = useState("");
     const isRetrievedNeed = useSelector((state) => state.projects);
-
+    socket.on('message', (data) => {
+        console.log("Socket data", data);
+    });
     useEffect(() => {
         retrieveProject()
         .then ((data) => {

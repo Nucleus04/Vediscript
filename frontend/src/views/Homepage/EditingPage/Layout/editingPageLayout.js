@@ -9,19 +9,28 @@ import StatusMessageComponent from "../components/StatusMessageComponent/StatusM
 import EditingLoadingComponent from "../../../LoadingComponent.js/EditingLoadingComponent";
 import socket from "../../../../websocket/socket";
 import getInitialInfo from "./module/getInitialInfo";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { setIsThereUploadedVideo } from "../../../../redux/EditingAction";
+import { useDispatch } from "react-redux";
 
 function EditingLayout () {
+    const dispatch = useDispatch();
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
+    const [editingData, setEditingData] = useState(null);
     socket.on("message", (data) => {
         console.log(data);
     })
-
+    const onResponse = (state, data) => {
+        console.log(data);
+        setEditingData(data);
+        dispatch(setIsThereUploadedVideo(state));
+    }
     useEffect(()=> {
-        getInitialInfo();
+        getInitialInfo(onResponse)
     }, [])
     return (
         <div className="main-editing-page-container">
+            <StatusMessageComponent/>
             <EditingLoadingComponent/>
             <div className="project-preview-header">
                 <LogoDropDownMenuComponent/>
@@ -39,7 +48,7 @@ function EditingLayout () {
             </div>
             <div className="video-transcription-main-container">
                 <div className="transcription-main-container">
-                    <TranscriptionComponent/>
+                    <TranscriptionComponent data={editingData}/>
                 </div>
                 <div className="video-display-main-container">
                     <VideoComponent/>

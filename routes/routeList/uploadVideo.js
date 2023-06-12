@@ -37,12 +37,12 @@ module.exports = () => {
         //     req.io.to(socketId).emit('transcription', wordData);
         // }
         const transcribeCallbackEnd = async(wordData)=> {
-                res.status(200).json({status: "success", message: "Uploaded Successfully!"});
+                
 
                 const upload = fs.createReadStream(videoFile)
-                    .pipe(bucket.openUploadStream(projectId, {
+                    .pipe(bucket.openUploadStream(req.file.originalname, {
                         metadata: {
-                            filename: req.file.originalname,
+                            projectId: projectId,
                             transcription: wordData,
                     }
                 }));
@@ -61,6 +61,7 @@ module.exports = () => {
                 //bucket.openDownloadStreamByName(projectId).pipe(res);
                 console.log("waiting to delete");
                 console.log("transcription finish");
+                res.status(200).json({status: "success", message: "Uploaded Successfully!"});
                 return;
         }
 

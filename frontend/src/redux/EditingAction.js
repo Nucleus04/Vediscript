@@ -23,3 +23,9 @@ export const setSuccessEvent = (value) => {
         payload: value,
     }
 }
+export const setIsThereUploadedVideo = (value) => {
+    return {
+        type: "SET_IS_THERE_UPLOADED_VIDEO",
+        payload: value,
+    }
+}

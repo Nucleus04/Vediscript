@@ -2,6 +2,7 @@
 const initialState = {
     isThereError: {
         state: false,
+        status: "",
         message: "",
     },
     isLoading: false,
@@ -10,6 +11,7 @@ const initialState = {
         state: false,
         message: "",
     },
+    isThereUploadedVideo: "false",
 }
 
 export const EditingPageReducer = (state = initialState, action) => {
@@ -33,6 +35,11 @@ export const EditingPageReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isThereSuccessEvent: action.payload,
+            }
+        case "SET_IS_THERE_UPLOADED_VIDEO":
+            return {
+                ...state,
+                isThereUploadedVideo: action.payload,
             }
         default:
             return state;

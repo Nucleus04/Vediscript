@@ -30,11 +30,6 @@
     background-color: rgb(208, 208, 208);
     z-index: 1;
 }
-
-.success {
-  background-image: url(../../../../public/success.png);
-  background-size: cover;
-}
 .lds-spinner {
     color: official;
     display: inline-block;

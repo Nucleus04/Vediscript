@@ -9,6 +9,7 @@ const deleteProject = require("./routeList/deleteProject");
 const uploadVideo = require("./routeList/uploadVideo");
 const videoDisplay = require("./routeList/video-display");
 const getInitialInfo = require("./routeList/getInitialInfo");
+const getTranscription = require("./routeList/getTranscription");
 
 const router = express.Router();
 
@@ -20,7 +21,8 @@ module.exports = () => {
     router.use("/edit-project", authenticateToken(), editDetail());
     router.use("/delete-project", authenticateToken(), deleteProject());
     router.use("/upload-video", authenticateToken(), uploadVideo());
-    router.use("/video-display", authenticateToken(), videoDisplay());
+    router.use("/video-display", videoDisplay());
     router.use("/get-initial-info", authenticateToken(), getInitialInfo());
+    router.use("/get-transcription", getTranscription());
     return router;
 }

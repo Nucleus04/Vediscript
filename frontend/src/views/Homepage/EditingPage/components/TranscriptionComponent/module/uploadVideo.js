@@ -1,5 +1,6 @@
 import socket from "../../../../../../websocket/socket";
 const UploadVideo = async(file, onErrorResponse, onLoading, onSuccessResponse) => {
+    console.log("uploading the video...");
     let socketId = socket.id;
     const formdata = new FormData();
     formdata.append("video", file);
@@ -17,7 +18,8 @@ const UploadVideo = async(file, onErrorResponse, onLoading, onSuccessResponse) =
             body: formdata,
         })
         if (response.ok) {
-            onSuccessResponse();
+            const result = await response.json();
+            onSuccessResponse(result.message);
         } else {
             const result = await response.json();
             console.log("Theres a problem on uploading the file", result);

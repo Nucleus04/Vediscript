@@ -48,3 +48,10 @@
 .display-none {
     display: none;
 }
+.success {
+    background-image: url(../../../../../../public/success.png);
+    background-size: cover;
+}
+.statusMessage{
+    margin-left: 20px;
+}

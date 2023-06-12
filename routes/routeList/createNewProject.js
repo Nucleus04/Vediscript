@@ -9,7 +9,7 @@ module.exports = () => {
         console.log("This is th data", req.body);
         const data = project.add()
         .then((projectDetails) => {
-            console.log("Add project successful:", projectDetails)
+            console.log("Add project successful");
         }).catch((error) => {
             console.log("there has been error", error)
         });

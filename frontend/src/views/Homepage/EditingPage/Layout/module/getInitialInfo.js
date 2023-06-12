@@ -1,6 +1,6 @@
 
 
-const getInitialInfo = async() => {
+const getInitialInfo = async(callback) => {
 
     const token = localStorage.getItem("authToken");
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
@@ -15,10 +15,13 @@ const getInitialInfo = async() => {
             body: JSON.stringify(projectDetail),
         })
         if(response.ok) {
-            
-            console.log(await response.json());
-        } else {
+            const data = await response.json()
+            callback(true, data);
+
+            } else {
+            callback(false)
             console.log("There something wrong");
+            console.log(await response.json());
         }
     } catch (error) {
         console.log("error", error);

@@ -8,16 +8,21 @@ import VideoComponent from "../components/VideoComponent/VideoComponent";
 import StatusMessageComponent from "../components/StatusMessageComponent/StatusMessageComponent";
 import EditingLoadingComponent from "../../../LoadingComponent.js/EditingLoadingComponent";
 import socket from "../../../../websocket/socket";
+import getInitialInfo from "./module/getInitialInfo";
+import { useEffect } from "react";
 
 function EditingLayout () {
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
     socket.on("message", (data) => {
         console.log(data);
     })
+
+    useEffect(()=> {
+        getInitialInfo();
+    }, [])
     return (
         <div className="main-editing-page-container">
             <EditingLoadingComponent/>
-            <StatusMessageComponent/>
             <div className="project-preview-header">
                 <LogoDropDownMenuComponent/>
                 <div className="project-name-editpage">

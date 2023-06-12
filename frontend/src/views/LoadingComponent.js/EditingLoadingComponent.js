@@ -13,34 +13,27 @@ function EditingLoadingComponent () {
     const globalState = useSelector((state) => state.edit);
     useEffect(() => {
         if(globalState.isLoading === true) {
-            setShowLoading(true);
+            setShowLoading(globalState.isLoading);
             setLoadingStatus(globalState.loadingStatus)
         }
-        if(globalState.isThereSuccessEvent.state === true){
-            setSuccess(globalState.isThereSuccessEvent.state);
-            setSuccessMessage(globalState.isThereSuccessEvent.message);
+        else {
+            setShowLoading(globalState.isLoading);
+            setLoadingStatus(globalState.loadingStatus)
         }
+        // if(globalState.isThereSuccessEvent.state === true){
+        //     setSuccess(globalState.isThereSuccessEvent.state);
+        //     setSuccessMessage(globalState.isThereSuccessEvent.message);
+        // }
     }, [globalState]);
 
-    const handleOk = () => {
-        let data = {
-            state: false,
-            message: "",
-        }
-        dispatch(setLoading(false));
-        //dispatch(setSuccessEvent(data));
-        dispatch(setLoadingStatus(""));
-        setShowLoading(false);
-
-    }
+    
     return (
     <div className={`loading-background ${showLoading? "": `display-none`}`}>
         <div className="loader-container">
-            <div className={`loader ${success? `success` : ""}`}>
-                <div className={`lds-spinner ${success? `display-none` : ``}`}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <div className={`loader`}>
+                <div className={`lds-spinner `}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
             </div>
-            <p>{success? successMessage :loadinStatus}</p>
-            <button onClick={handleOk}>ok</button>
+            <p>{loadinStatus}</p>
         </div>
       
     </div>

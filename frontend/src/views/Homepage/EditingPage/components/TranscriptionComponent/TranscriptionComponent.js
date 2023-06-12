@@ -45,6 +45,7 @@ function TranscriptionComponent () {
         UploadVideo(selectedfile, onErrorResponse, onLoading, onSuccessResponse);
     }
     const onErrorResponse = (errorMessage) => {
+        
         const error = {
             state: true,
             message: errorMessage,

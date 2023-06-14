@@ -37,8 +37,10 @@ export const projectPreviewReducer = (state = initialState, action) => {
                     state: action.payload,
                 }
             }
-            default:
-                return state;
+        case  "RESET_STATE":
+            return initialState;
+        default:
+            return state;
     }
 };
 

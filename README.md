@@ -2,7 +2,7 @@
  Light weight video editing app on the go
 
 # api start
-    - npm start : in root directory
+    - npm rundev/npm start : in root directory
 # front end start
     - npm start : cd to /frontend dir
 
@@ -17,8 +17,3 @@ Import audio,
 Download finished 
 
 
-multer- video uploading tool
-
-
-google cloud speech to text
-IBM watson

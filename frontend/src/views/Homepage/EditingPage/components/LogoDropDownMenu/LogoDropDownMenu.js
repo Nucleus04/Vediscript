@@ -1,12 +1,16 @@
 import "./style.css";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { resetEditingGlobalState } from "../../../../../redux/EditingAction";
+import { resetState } from "../../../../../redux/action";
+import { useDispatch } from "react-redux";
 
 function LogoDropDownMenuComponent () {
     const [showDropDown, setShowDropDown] = useState(false);
     const [showFileDropdown, setShowFileDropDown] = useState(false);
     const menuRef = useRef(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleDropDownMenu = () => {
         setShowDropDown(!showDropDown);
@@ -20,6 +24,8 @@ function LogoDropDownMenuComponent () {
         setShowFileDropDown(false);
     }
     const handleBeckToProject = () => {
+        dispatch(resetEditingGlobalState());
+        dispatch(resetState());
         navigate("/project-preview");
     }
 

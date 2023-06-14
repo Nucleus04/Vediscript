@@ -29,3 +29,26 @@ export const setIsThereUploadedVideo = (value) => {
         payload: value,
     }
 }
+export const setCurrentVideoTimestamp = (value) => {
+    return {
+        type: "SET_CURRENT_VIDEO_TIMESTAMP",
+        payload: value,
+    }
+}
+export const setPlaybackTime = (value) => {
+    return {
+        type: "SET_PLAYBACK_TIME",
+        payload: value,
+    }
+}
+export const setIsNavigatingTroughScript = (value) => {
+    return {
+        type: "SET_IS_NAVIGATING_THROUGH_SCRIPT",
+        payload: value,
+    }
+}
+export const resetEditingGlobalState = () => {
+    return {
+        type: "RESET_STATE",
+    }
+}

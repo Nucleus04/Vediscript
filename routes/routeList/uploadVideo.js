@@ -24,6 +24,7 @@ module.exports = () => {
 
         const videoFile = req.file.path;
         let socketId = req.body.socketId;
+        let bitrate, duration;
         const projectId = req.body.projectId;
         const bucket = GridFS((error) => {
             console.log("There is error initializing the Grid FS", error);
@@ -32,18 +33,16 @@ module.exports = () => {
         });
 
         req.io.to(socketId).emit('audio-extraction', 'start');
-
-        // const transcribeCallbackDuring = (wordData) => {
-        //     req.io.to(socketId).emit('transcription', wordData);
-        // }
         const transcribeCallbackEnd = async(wordData)=> {
                 
-
+                console.log("metadata", duration, bitrate);
                 const upload = fs.createReadStream(videoFile)
                     .pipe(bucket.openUploadStream(req.file.originalname, {
                         metadata: {
                             projectId: projectId,
                             transcription: wordData,
+                            bitrate: bitrate,
+                            duration: duration,
                     }
                 }));
                 await new Promise((resolve, reject) => {
@@ -58,7 +57,6 @@ module.exports = () => {
                         console.log("Deleted file temporary file successfully");
                     }
                 });
-                //bucket.openDownloadStreamByName(projectId).pipe(res);
                 console.log("waiting to delete");
                 console.log("transcription finish");
                 res.status(200).json({status: "success", message: "Uploaded Successfully!"});
@@ -88,6 +86,12 @@ module.exports = () => {
                 return;
             }else {
                 req.io.to(socketId).emit('audio-extraction', 'finish');
+            }
+        },(metadata) => {
+            if(metadata) {
+                console.log(metadata);
+                bitrate = metadata.bitrate;
+                duration = metadata.duration;
             }
         });
 

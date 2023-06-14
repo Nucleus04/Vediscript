@@ -11,23 +11,21 @@ import socket from "../../../../websocket/socket";
 import getInitialInfo from "./module/getInitialInfo";
 import { useEffect, useState } from "react";
 import { setIsThereUploadedVideo } from "../../../../redux/EditingAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function EditingLayout () {
     const dispatch = useDispatch();
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
-    const [editingData, setEditingData] = useState(null);
     socket.on("message", (data) => {
         console.log(data);
     })
     const onResponse = (state, data) => {
-        console.log(data);
-        setEditingData(data);
         dispatch(setIsThereUploadedVideo(state));
     }
     useEffect(()=> {
         getInitialInfo(onResponse)
     }, [])
+
     return (
         <div className="main-editing-page-container">
             <StatusMessageComponent/>
@@ -48,7 +46,7 @@ function EditingLayout () {
             </div>
             <div className="video-transcription-main-container">
                 <div className="transcription-main-container">
-                    <TranscriptionComponent data={editingData}/>
+                    <TranscriptionComponent/>
                 </div>
                 <div className="video-display-main-container">
                     <VideoComponent/>

@@ -16,7 +16,7 @@ module.exports = () => {
                 data.push(element);
             };
 
-            res.status(200).json({message: "Your connected", data: data[data.length - 1].metadata.transcription})
+            res.status(200).json({message: "Your connected", data: data[data.length - 1].metadata.transcription, fileSize: data[data.length - 1].length, bitrate: data[data.length - 1].metadata.bitrate,})
         } else {
             res.status(400).json({message: "Transcription not found"})
         }

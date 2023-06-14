@@ -21,7 +21,7 @@ const getInitialInfo = async(callback) => {
             } else {
             callback(false)
             console.log("There something wrong");
-            console.log(await response.json());
+            //console.log(await response.json());
         }
     } catch (error) {
         console.log("error", error);

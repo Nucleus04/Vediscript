@@ -24,3 +24,8 @@ export const setEditingProjectDetailState = (value) => {
     }
 }
 
+export const resetState = () => {
+    return {
+        type: "RESET_STATE",
+    }
+}

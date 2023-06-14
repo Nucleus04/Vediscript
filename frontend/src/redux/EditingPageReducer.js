@@ -12,6 +12,9 @@ const initialState = {
         message: "",
     },
     isThereUploadedVideo: "false",
+    currentVideoTimeStamp: 0,
+    currentPlayback:0,
+    isNavigatingThroughScript: false,
 }
 
 export const EditingPageReducer = (state = initialState, action) => {
@@ -41,6 +44,23 @@ export const EditingPageReducer = (state = initialState, action) => {
                 ...state,
                 isThereUploadedVideo: action.payload,
             }
+        case "SET_CURRENT_VIDEO_TIMESTAMP":
+            return {
+                ...state,
+                currentVideoTimeStamp: action.payload,
+            }
+        case "SET_PLAYBACK_TIME":
+            return {
+                ...state,
+                currentPlayback: action.payload,
+            }
+        case "SET_IS_NAVIGATING_THROUGH_SCRIPT":
+            return{
+                ...state,
+                isNavigatingThroughScript:action.payload,
+            }
+        case "RESET_STATE":
+            return initialState;
         default:
             return state;
     }

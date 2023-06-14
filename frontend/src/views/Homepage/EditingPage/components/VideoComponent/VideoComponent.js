@@ -1,11 +1,87 @@
-
+import { useEffect, useRef, useState } from "react";
 import "./style.css";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading, setLoadingStatus, setCurrentVideoTimestamp, setIsNavigatingTroughScript } from "../../../../../redux/EditingAction";
+import socket from "../../../../../websocket/socket";
+import LoadingComponent from "../../../../LoadingComponent.js/LoadingComponent";
+
 function VideoComponent () {
    
+    const globalState = useSelector((state) => state.edit);
+    const [videoURL, setVideoURL] = useState("");
+    const [currentTimeStamp, setCurrentTime] = useState(0);
+    const [videoLoading, setVideoLoading] = useState(true);
+    const socketId = socket.id;
+    const dispatch = useDispatch();
+    const videoRef = useRef(null);
     const projectDetails = JSON.parse(localStorage.getItem("project-details"));
+
+
+    // socket.on("retrieve-start", (message) => {
+    //     dispatch(setLoading(true))
+    //     dispatch(setLoadingStatus(message));
+    // })
+    // socket.on("retrieve-end", () => {
+    //     dispatch(setLoading(false))
+    //     dispatch(setLoadingStatus(""));
+    // })
+    useEffect(() => {
+        if (globalState.isThereUploadedVideo === true) {
+            setVideoLoading(true);
+            setVideoURL(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}`);
+        } else {
+            setVideoLoading(false);
+            setVideoURL("");
+        }
+    }, [globalState.isThereUploadedVideo]);
+    const videoElement = videoRef.current;
+    
+    useEffect(() => {
+        if(videoElement) {
+            const timeTracker = () => {
+                setCurrentTime(videoElement.currentTime);
+                if(!globalState.isNavigatingThroughScript ){
+                    dispatch(setCurrentVideoTimestamp(currentTimeStamp));
+
+                } else {
+                    dispatch(setIsNavigatingTroughScript(false));
+                }
+            }
+            videoElement.addEventListener("timeupdate", timeTracker);
+            videoElement.addEventListener("canplay", () => {
+                setVideoLoading(false);
+            })
+            videoElement.addEventListener('waiting', function() {
+                console.log("waiting");
+                setVideoLoading(true);
+              });
+            return () => {
+                videoElement.removeEventListener("timeupdate", timeTracker);
+            }
+        }
+    })
+
+    
+    useEffect(() => {
+        const videoElement = videoRef.current;
+        if(globalState.currentPlayback !== 0) {
+            const setTime  = () => {
+                if(videoElement) {
+                    videoElement.currentTime = globalState.currentPlayback;
+                    videoElement.muted = false;
+                    if(!videoElement.paused)
+                        videoElement.play();
+                }
+            } 
+            setTime();
+        }
+        
+    }, [globalState.currentPlayback])
+
     return(
         <div className="video-main-container">
-            <video id="videoPlayer" className="video-controller-and-video-container"src={`http://localhost:5000/video-display/${projectDetails._id}`} type="video/mp4" controls>
+            {videoLoading? (<LoadingComponent/>) : ""}
+            <video id="videoPlayer" className="video-controller-and-video-container" ref={videoRef} src={videoURL? videoURL : ""} type="video/mp4" controls autoPlay>
                 <div className="video-controller-container">
                     video controller container
                 </div>

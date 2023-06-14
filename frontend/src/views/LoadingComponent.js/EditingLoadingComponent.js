@@ -28,7 +28,7 @@ function EditingLoadingComponent () {
 
     
     return (
-    <div className={`loading-background ${showLoading? "": `display-none`}`}>
+    <div className={`loading-background z-index-10 ${showLoading? "": `display-none`}`}>
         <div className="loader-container">
             <div className={`loader`}>
                 <div className={`lds-spinner `}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>

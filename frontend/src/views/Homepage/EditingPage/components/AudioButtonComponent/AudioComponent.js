@@ -2,11 +2,17 @@ import "./style.css";
 import ImportAudioComponent from "./components/ImportAudioComponent";
 import ReplaceAudioComponent from "./components/ReplaceAudioComponent";
 import RemoveAudioComponent from "./components/RemoveAudioComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 function AudioComponent () {
-
+    const globalOperationState = useSelector((state) => state.operation);
     const [showAudioModal, setShowAudioModal] = useState(false);
+    useEffect(() => {
+        if(globalOperationState.isRemovingAudio){
+            setShowAudioModal(false);
+        }
+    },[globalOperationState])
     const handleHoverEnter = () => {
         setShowAudioModal(true);
     }

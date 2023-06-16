@@ -1,112 +1,97 @@
 import "./style.css";
-import {useEffect, useRef, useState } from "react";
-import UploadVideo from "./module/uploadVideo";
-import { setIsThereError, setLoading, setLoadingStatus, setIsThereUploadedVideo, setCurrentVideoTimestamp, setPlaybackTime, setIsNavigatingTroughScript} from "../../../../../redux/EditingAction";
+import { useRef, useState, useEffect } from "react";
 import { useDispatch , useSelector} from "react-redux";
 import socket from "../../../../../websocket/socket";
 import getTranscription from "./module/getTranscription";
+import { useVideoRetriever, useWordHighlighter, useUndoRedoTranscript } from "./module/hooks";
+import { HanddleWordClickModule, HandleInputChangeModule, SocketListenerModule, handleMouseUpCrossOuter, removeCrossOutInScript } from "./module/handlerModule";
+import { setIsVerifying } from "../../../../../redux/EditingAction";
+import { setIsRemovingAudio, setIsThereCurrentOperation, setRemoveDetails } from "../../../../../redux/OperationAction";
+import { setIsThereError } from "../../../../../redux/EditingAction";
 
 
 function TranscriptionComponent () {
     const socketId = socket.id;
     const projectDetails = JSON.parse(localStorage.getItem("project-details"));
     const globalState = useSelector((state) => state.edit);
+    const globalOperationState = useSelector((state) => state.operation);
+    const [cursor, setCursor] = useState("auto");
     const fileInputRef = useRef(null);
     const dispatch = useDispatch();
     const [script, setScript] = useState("");
     const currentWord = useRef(null);
+    const [isSelectingWord, setIsSelectingWord] = useState(false);
+    const [endTime, setEndTime] = useState("");
+    const [startTime, setStartTime] =useState("");
+    const history = useSelector((state) => state.history);
+
+    useVideoRetriever(globalState, getTranscription, setScript);
+    useWordHighlighter(globalState);
+    SocketListenerModule(socket, dispatch);
+    useUndoRedoTranscript(history, removeCrossOutInScript, handleMouseUpCrossOuter);
+    let end = [], start = [];
 
     useEffect(() => {
-        if(globalState.isThereUploadedVideo === true) {
-            getTranscription((data) => {
-                console.log("callback", data);
-                setScript(data);
-            });
-        }
-    }, [globalState.isThereUploadedVideo])
+       if(globalOperationState.isRemovingAudio) {
+            setCursor("crosshair");
+       } else {
+            setCursor("auto");
+       }
+    }, [globalOperationState.isRemovingAudio])
 
-    socket.on('audio-extraction', (data) => {
-        if(data === "start") {
-            dispatch(setLoadingStatus("Uploading..."));
-        }
-        else{
-            dispatch(setLoadingStatus(""));
-        }
-    });
     const handleUploadClick = () => {
         fileInputRef.current.value = null;
         fileInputRef.current.click();
     }
+
     const handleFileChange = (event) => {
-
-        const onSuccessResponse = (successMessage) => {
-            const error = {
-                state: true,
-                status: "success",
-                message: successMessage,
-            }
-            dispatch(setIsThereUploadedVideo(true));
-            dispatch(setIsThereError(error));
-        }
-
-        const onLoading = (state) => {
-            dispatch(setLoading(state));
-        }    
-
-        event.preventDefault();
-        let selectedfile = event.target.files[0];
-        UploadVideo(selectedfile, onErrorResponse, onLoading, onSuccessResponse);
-        selectedfile = null;
+        HandleInputChangeModule(event, dispatch)
     }
-    const onErrorResponse = (errorMessage) => {
-        console.log("There has been error");
-        const error = {
-            state: true,
-            status: "fail",
-            message: errorMessage,
-        }
-        dispatch(setIsThereError(error));
-    }
-    
+
     const handleWordClick = async(event) => {
-        dispatch(setPlaybackTime(event.target.dataset.start));
-        dispatch(setIsNavigatingTroughScript(true));
-        dispatch(setCurrentVideoTimestamp(parseFloat(event.target.dataset.start)));
-        let second = parseFloat(event.target.dataset.start);
-        console.log(second);
-        let bit_rate = script.bitrate;
-        console.log(bit_rate);
-        let range = Math.floor((bit_rate * second) / 8);
-        console.log(range);
-        try {
-            await fetch(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}`, {
-                headers: {
-                    Range: `bytes=${parseInt(range)}-`,
-                }
-            })
-        } catch (error) {
-            console.log("Error on jumping to the video")
-        }
+        HanddleWordClickModule(event, script, socketId, projectDetails, dispatch);
     }
 
     useEffect(() => {
-        const time = globalState.currentVideoTimeStamp.toFixed(1);
-        const targetWord = Array.from(document.querySelectorAll(`.transcription-container-inside span`));
-        for(let i=0; i<targetWord.length; i++) {
-            if(parseFloat(targetWord[i].getAttribute("data-start")) <= time &&  parseFloat(targetWord[i].getAttribute("data-end")) > time ){
-                targetWord[i].style.backgroundColor = "#a0eda3";
-                targetWord[i].scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                })
-            } else{
-                targetWord[i].style.backgroundColor = "transparent";
+        if(startTime === undefined || endTime === undefined) {
+            const error = {
+                state: true,
+                status: "fail",
+                message: "Oops!, I didnt catch that, please try again",
+            }
+            dispatch(setIsThereError(error));
+        }
+    }, [startTime, endTime])
+    const handleMouseUp = () => {
+        if(globalOperationState.isRemovingAudio) {
+            setIsSelectingWord(false)
+            dispatch(setRemoveDetails({start: startTime, end: endTime}));
+            dispatch(setIsVerifying(true));
+        }
+    }
+
+    const handleMouseDown = (event) => {
+        if(globalOperationState.isRemovingAudio){
+                setStartTime(event.target.getAttribute("data-start"));
+                setEndTime(event.target.getAttribute("data-end"));
+                setIsSelectingWord(true)
+        }
+    }
+   
+    const handleSelectedWord = (event) => {
+        if(globalOperationState.isRemovingAudio) {
+            if(isSelectingWord) { 
+                if(parseFloat(event.target.getAttribute("data-start")) < parseFloat(startTime))
+                    setStartTime(event.target.getAttribute("data-start"))
+
+                if(parseFloat(event.target.getAttribute("data-end")) > parseFloat(endTime))
+                    setEndTime(event.target.getAttribute("data-end"))
             }
         }
-    }, [globalState.currentVideoTimeStamp]);
-
+    }
+    
     return (
-        <div className="transcription-container">
+        <div className="transcription-container" style={{cursor : cursor }} onMouseUp={handleMouseUp}>
             <div className={`transcription-container-inside ${globalState.isThereUploadedVideo? "" : "display-center-item" }`}>
                 <input type="file" ref ={fileInputRef} onChange={handleFileChange} style={{ display:"none"}}/>
                 {script ? script.data.map((item, index) => {
@@ -115,8 +100,11 @@ function TranscriptionComponent () {
                             key={index}
                             data-start = {item.startTime}
                             data-end = {item.endTime}
+                            onMouseDown={handleMouseDown} 
                             onClick={handleWordClick}
                             ref={currentWord}
+                            style={globalOperationState.isRemovingAudio? {cursor: "crosshair"} : {cursor: "pointer"}}
+                            onMouseOver={handleSelectedWord}
                             >{item.word}</span>
                 }) : ""}
                 <button className={`${globalState.isThereUploadedVideo? "display-none" : "uplaod-button" }`} type="submit" onClick={handleUploadClick}>Upload</button>

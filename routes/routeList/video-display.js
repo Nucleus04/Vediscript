@@ -22,7 +22,7 @@ module.exports = () => {
         };
  
         const range = req.headers.range;
-        console.log(range);
+
         if(range) {
             const [start, end] = range.replace(/bytes=/, '').split('-');
             const parsedStart = parseInt(start, 10);

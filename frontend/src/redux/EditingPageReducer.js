@@ -15,6 +15,9 @@ const initialState = {
     currentVideoTimeStamp: 0,
     currentPlayback:0,
     isNavigatingThroughScript: false,
+    isRemovingAudio: false,
+    isVerifying: false,
+    verified: false,
 }
 
 export const EditingPageReducer = (state = initialState, action) => {
@@ -58,6 +61,21 @@ export const EditingPageReducer = (state = initialState, action) => {
             return{
                 ...state,
                 isNavigatingThroughScript:action.payload,
+            }
+        case "SET_IS_REMOVING_AUDIO": 
+            return {
+                ...state,
+                isRemovingAudio: action.payload,
+            }
+        case "SET_IS_VERIFYING": 
+            return {
+                ...state,
+                isVerifying: action.payload,
+            }
+        case "SET_VERIFIED": 
+            return {
+                ...state,
+                verified: action.payload,
             }
         case "RESET_STATE":
             return initialState;

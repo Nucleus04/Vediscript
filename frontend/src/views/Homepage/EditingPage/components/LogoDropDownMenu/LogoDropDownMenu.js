@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { resetEditingGlobalState } from "../../../../../redux/EditingAction";
 import { resetState } from "../../../../../redux/action";

@@ -18,7 +18,9 @@ function ProjectNavigatorComponent ({ project }) {
     const handleMenuClick = () => {
         setShowMenuButton(!showMenuButton);
     }
-    
+    const closeMenu = () => {
+        setShowMenuButton(false);
+    }
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -67,7 +69,7 @@ function ProjectNavigatorComponent ({ project }) {
                 <div className="bookmark-menu">
                     <div className="bookmark-design"></div>
                     <img className="menu-button-projects" onClick={handleMenuClick} src="more.png" alt="menu" width={25} height={25} />
-                    <div className={`more-menu-project ${showMenuButton? "" : "display-none"}`} ref={menuRef}>
+                    <div className={`more-menu-project ${showMenuButton? "" : "display-none"}`} onMouseLeave={closeMenu}>
                         <button className="menu-button submit-color edit-button" onClick={handleEditButton}>Edit</button>
                         <button className="menu-button cancel-color delete-button" onClick={handleDeleteButton}>Delete</button>
                     </div>

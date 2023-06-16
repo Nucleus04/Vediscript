@@ -1,5 +1,5 @@
 import "./style.css";
-import ProfileComponent from "../../../CommonComponents/ProfileComponent/ProfileComponent";
+import ProfileComponent from "../../../ProfileComponent/ProfileComponent";
 import CreateNewProjectComponent from "../CreateNewProject/CreateNewProjectComponent";
 import ProjectNavigatorComponent from "../ProjectNavigator/ProjectNavigatorComponent";
 import NewProjectFormComponent from "../NewProjectFormComponent.js/NewProjectFormComponent";

@@ -6,6 +6,7 @@ class UploadController {
     }
 
     handleFileviaMulter = () => {
+        console.log("I am in multer");
         const upload = multer({
             dest:"uploads/",
             fileFilter: (req, file, cb) => {
@@ -22,13 +23,16 @@ class UploadController {
     uploadErrorChecker = () => {
 
         const UploadErrorChecker = (err, req, res, next) => {
+            console.log("File checking");
             if (res.headersSent) {
-                return next(err);
+                return;
             }
             if (err instanceof multer.MulterError) {
                 res.status(400).json({ status: "fail", message: "Error during file upload." });
+                return;
             } else {
                 res.status(400).json({ status: "fail", message: err.message });
+                return;
             }
         }
 

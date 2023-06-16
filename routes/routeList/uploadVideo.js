@@ -20,6 +20,7 @@ module.exports = () => {
     const upload = uploadController.handleFileviaMulter();
     const uploadErrorChecker = uploadController.uploadErrorChecker();
 
+
     router.post("/",upload.single('video'),uploadErrorChecker, async(req, res) => {
 
         const videoFile = req.file.path;
@@ -37,7 +38,7 @@ module.exports = () => {
                 
                 console.log("metadata", duration, bitrate);
                 const upload = fs.createReadStream(videoFile)
-                    .pipe(bucket.openUploadStream(req.file.originalname, {
+                    .pipe(bucket.openUploadStream(projectId, {
                         metadata: {
                             projectId: projectId,
                             transcription: wordData,

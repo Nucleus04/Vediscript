@@ -24,7 +24,7 @@
 }
 .editing-menu-button-container{
     height: 25px;
-    width: 400px;
+    width: 300px;
     display: flex;
 }
 .editing-menu-button {
@@ -60,4 +60,7 @@
 .video-display-main-container{
     width: 50%;
     height: 100%;
+}
+.display-none{
+    display: none;
 }

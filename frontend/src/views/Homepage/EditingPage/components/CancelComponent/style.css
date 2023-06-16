@@ -1,0 +1,18 @@
+.editing-menu-button-cancel{
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10pt;
+    font-weight: 600;
+    width: 50px;
+    color: rgb(255, 255, 255);
+    border-radius: 5px;
+    background-color: rgb(255, 69, 69);
+    cursor: default;
+}
+
+.editing-menu-button-cancel:hover{
+    background-color: #f33030;
+    transform: scale(1.10);
+}

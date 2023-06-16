@@ -52,7 +52,6 @@ function VideoComponent () {
                 setVideoLoading(false);
             })
             videoElement.addEventListener('waiting', function() {
-                console.log("waiting");
                 setVideoLoading(true);
               });
             return () => {
@@ -81,7 +80,7 @@ function VideoComponent () {
     return(
         <div className="video-main-container">
             {videoLoading? (<LoadingComponent/>) : ""}
-            <video id="videoPlayer" className="video-controller-and-video-container" ref={videoRef} src={videoURL? videoURL : ""} type="video/mp4" controls autoPlay>
+            <video id="videoPlayer" className="video-controller-and-video-container" ref={videoRef} src={videoURL? videoURL : ""} type="video/mp4" controls >
                 <div className="video-controller-container">
                     video controller container
                 </div>

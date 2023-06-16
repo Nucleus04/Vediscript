@@ -10,6 +10,7 @@ const uploadVideo = require("./routeList/uploadVideo");
 const videoDisplay = require("./routeList/video-display");
 const getInitialInfo = require("./routeList/getInitialInfo");
 const getTranscription = require("./routeList/getTranscription");
+const removeAudio = require("./routeList/remove-audio");
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ module.exports = () => {
     router.use("/video-display", videoDisplay());
     router.use("/get-initial-info", authenticateToken(), getInitialInfo());
     router.use("/get-transcription", getTranscription());
+    router.use("/remove-audio", authenticateToken(), removeAudio());
     return router;
 }

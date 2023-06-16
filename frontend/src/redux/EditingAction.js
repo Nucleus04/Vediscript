@@ -4,7 +4,6 @@ export const setIsThereError = (value) => {
         payload: value,
     }
 }
-
 export const setLoading = (value) => {
     return{
         type: 'SET_IS_LOADING',
@@ -44,6 +43,18 @@ export const setPlaybackTime = (value) => {
 export const setIsNavigatingTroughScript = (value) => {
     return {
         type: "SET_IS_NAVIGATING_THROUGH_SCRIPT",
+        payload: value,
+    }
+}
+export const setIsVerifying = (value) => {
+    return {
+        type: "SET_IS_VERIFYING",
+        payload: value,
+    }
+}
+export const setVerified = (value) => {
+    return {
+        type: "SET_VERIFIED",
         payload: value,
     }
 }

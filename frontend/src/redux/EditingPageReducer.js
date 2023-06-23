@@ -18,6 +18,7 @@ const initialState = {
     isRemovingAudio: false,
     isVerifying: false,
     verified: false,
+    initialInformation: "",
 }
 
 export const EditingPageReducer = (state = initialState, action) => {

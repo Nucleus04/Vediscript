@@ -1,17 +1,17 @@
 //import { useDispatch } from "react-redux";
 import { setPlaybackTime, setIsNavigatingTroughScript, setCurrentVideoTimestamp,setLoadingStatus, setIsThereError, setIsThereUploadedVideo, setLoading } from "../../../../../../redux/EditingAction";
 import UploadVideo from "./uploadVideo";
-export const HanddleWordClickModule = async(event, script, socketId, projectDetails, dispatch) => {
+export const HanddleWordClickModule = async(event, script, socketId, projectDetails, dispatch, history) => {
     //const dispatch = useDispatch();
     let second = parseFloat(event.target.dataset.start);
-        let bit_rate = script.bitrate;
+        let bit_rate = script.data.metadata.bitrate;
         let range = Math.floor((bit_rate * second) / 8);
-
+        console.log("bitrate",bit_rate);
         dispatch(setPlaybackTime(event.target.dataset.start));
         dispatch(setIsNavigatingTroughScript(true));
         dispatch(setCurrentVideoTimestamp(parseFloat(event.target.dataset.start)));
         try {
-            await fetch(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}`, {
+            await fetch(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}/${history.currentHistoryIndex}`, {
                 headers: {
                     Range: `bytes=${parseInt(range)}-`,
                 }
@@ -58,8 +58,8 @@ export const HandleInputChangeModule = (event, dispatch) => {
 
 export const SocketListenerModule = (socket, dispatch) => {
     socket.on('audio-extraction', (data) => {
-        if(data === "start") {
-            dispatch(setLoadingStatus("Uploading..."));
+        if(data.state === "start") {
+            dispatch(setLoadingStatus(data.message));
         }
         else{
             dispatch(setLoadingStatus(""));

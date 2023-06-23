@@ -2,7 +2,6 @@ import ProjectPreviewLayout from "../views/Homepage/ProjectPreviewPage/component
 import { BrowserRouter as Router, Route, Navigate, Routes, useParams } from 'react-router-dom';
 import AuthenticationPage from '../views/Login-Signup-Component/Authentication-page';
 import LandingPage from '../views/ladingPage/LandingPage';
-import EditingLayout from "../views/Homepage/EditingPage/Layout/editingPageLayout";
 import PageUnavailable from "../views/ErrorPage/PageUnavailable";
 import EditingPageMiddleware from "../middleware/EditingPageMiddleware";
 import session from '../session/session';
@@ -14,7 +13,6 @@ function Routers () {
     const currentsession = new session();
     const isTheretoken = currentsession.tokenCheck();
     const isThereUserData = currentsession.userDataCheck();
-    const { projectId } = useParams();
 
     return (
         <Router>

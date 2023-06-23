@@ -1,9 +1,12 @@
 import { useEffect } from "react";
+import { addInitialRemoveAudio } from "../../../../../../redux/HistoryTrackerAction";
 
-export const useVideoRetriever = (globalState, getTranscription, setScript) => {
+
+export const useVideoRetriever = (dispatch, globalState, getTranscription, setScript) => {
     useEffect(() => {
         if(globalState.isThereUploadedVideo === true) {
             getTranscription((data) => {
+              
                 setScript(data);
             });
         }
@@ -44,4 +47,40 @@ export const useUndoRedoTranscript = (history, removeCrossOutInScript, handleMou
             removeCrossOutInScript();
         }
     }, [history.currentState]);
+}
+
+
+export const useModificationChecker = (script, dispatch) => {
+    useEffect(() => {
+        if(script)
+            if(script.data.metadata.hasOwnProperty("modification")) {
+                console.log("There is a modification", script.data.metadata);
+                let remove_audio = script.data.metadata.modification.remove_audio;
+                let transcription = script.data.metadata.transcription;
+                let bitrate = script.data.metadata.bitrate;
+                let duration = script.data.metadata.duration;
+
+                dispatch(addInitialRemoveAudio({
+                    remove_audio,
+                    transcription,
+                    bitrate,
+                    duration,
+                }));
+                //dispatch(resetHistoryIndex());
+
+            } else {
+                console.log("There is no current modification");
+            }
+    }, [script]);
+}
+
+
+export const useCursorChanger = (globalOperationState, setCursor) => {
+    useEffect(() => {
+        if(globalOperationState.isRemovingAudio) {
+             setCursor("crosshair");
+        } else {
+             setCursor("auto");
+        }
+     }, [globalOperationState.isRemovingAudio])
 }

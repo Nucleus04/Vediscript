@@ -12,6 +12,7 @@ class Project {
             userId : this.projectDetails.id,
             projectName : this.projectDetails.projectData.projectName,
             projectDescription: this.projectDetails.projectData.projectDescription,
+            videoId: "",
         }
         const project = new ProjectModel(data);
         try {

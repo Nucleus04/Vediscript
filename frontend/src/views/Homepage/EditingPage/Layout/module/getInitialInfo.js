@@ -1,10 +1,16 @@
+import socket from "../../../../../websocket/socket";
 
-
-const getInitialInfo = async(callback) => {
+const getInitialInfo = async(callback, historyIndex) => {
 
     const token = localStorage.getItem("authToken");
+    const socketId = socket.id;
+    console.log(historyIndex);
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
-
+    const data = {
+        socketId: socketId,
+        projectDetails: projectDetail,
+        historyIndex: historyIndex,
+    }
     try {
         const response = await fetch("http://localhost:5000/get-initial-info", {
             method: "POST",
@@ -12,7 +18,7 @@ const getInitialInfo = async(callback) => {
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(projectDetail),
+            body: JSON.stringify(data),
         })
         if(response.ok) {
             const data = await response.json()

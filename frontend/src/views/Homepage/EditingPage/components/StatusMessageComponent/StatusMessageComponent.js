@@ -1,19 +1,14 @@
 import "./style.css";
-import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsThereError } from "../../../../../redux/EditingAction";
+import useShowStatusModal from "./hooks/useShowStatusModal";
 
 function StatusMessageComponent () {
-    const [showErrorModal, setShowErrorModal] = useState(false);
+    
     const globalState = useSelector((state) => state.edit);
     const dispatch = useDispatch();
-    useEffect(() => {
-        if(globalState.isThereError.state === true)
-            setShowErrorModal(true);
-        else{
-            setShowErrorModal(false);
-        }
-    },[globalState.isThereError]);
+    const showErrorModal = useShowStatusModal(globalState);
+
     const handleOkayButton = () => {
         const error = {
             state: false,

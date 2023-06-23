@@ -3,7 +3,8 @@ const ffmpegPath = require("@ffmpeg-installer/ffmpeg");
 const ffprobePath = require("@ffprobe-installer/ffprobe");
 const GridFS = require("../models/GridFS");
 const fs = require("fs");
-
+const ProjectModel = require("../models/Project");
+const path = require("path");
 ffmpeg.setFfprobePath(ffprobePath.path);
 ffmpeg.setFfmpegPath(ffmpegPath.path);
 
@@ -52,39 +53,94 @@ class VideoManipulator{
     }
 
 
-    async removeAudio (params) {
+    async removeAudio (params, req, res) {
         const bucket = GridFS((error) => {
             console.log("Error in GridFs", error);
         })
+        let percentage = 0;
         const cursor = await bucket.find({"metadata.projectId": params.projectId});
         let data = [];
+        let formerVideo = parseInt(req.body.historyIndex)-1;
+        console.log("formervideoooo",formerVideo);
+        console.log("HistoryIndexxx");
         if(await cursor.hasNext()){
             for await(const element of cursor) {
                 data.push(element);
             };
-        console.log(data);
-        //bucket.openDownloadStreamByName(data[data.length - 1].filename).pipe(res);
-        const inputVideo  = bucket.openDownloadStreamByName(data[data.length - 1].filename);
-        //const inputVideo = fs.createReadStream(__dirname+"/c.mp4");
-      const output = fs.createWriteStream(__dirname + "/b.mp4");
-      ffmpeg.ffprobe((inputVideo), (err, metadata) => {
-        if(err){
-            console.log("ERROR", err);
-        } else {
-            console.log(metadata);
-        }
-    })
+            let inputVideo;
+            if(fs.existsSync(path.join(__dirname, "..", "temp",`${params.projectId}`, `${params.projectId}${parseInt(req.body.historyIndex)}.webm`))){
+                console.log("I get the inout in locals");
+                inputVideo = fs.createReadStream(path.join(__dirname, "..", "temp",`${params.projectId}`, `${params.projectId}${parseInt(req.body.historyIndex)}.webm`), {highWaterMark: 40000});
+            } else {
+                console.log("I get the inout in localsssssssssss");
+                inputVideo = bucket.openDownloadStreamByName(`${params.projectId}.webm`);
+            }
 
-        const filter = ffmpeg(inputVideo)
-            .seekInput("00:00:01")
-            .setDuration("00:00:10")
-            .noAudio()
-            .pipe(output)
-            .on('end', () => console.log('Audio removal complete'))
-            .on('error', (err) => console.error('Error removing audio:', err))
+            inputVideo.on('data', (chunk) => {
+                percentage = (((chunk.length)/data[data.length -1].length) * 100) + percentage;
+                req.io.to(req.body.socketId).emit('removing-audio', {state: "start", message:`Removing Audio... ${percentage.toFixed(2)}%`});
+            })
+            const outputVideo = bucket.openUploadStream(`${params.projectId}.webm`, {
+                chunkSizeBytes: 40000,
+                metadata: {
+                    ...data[data.length - 1].metadata,
+                    modification: {
+                    remove_audio: [
+                        ...data[data.length - 1].metadata.modification.remove_audio,
+                            {
+                                start: params.start,
+                                end: params.end,
+                            }
+                        ]
+                    }
+                }
+            })
 
-            inputVideo.pipe(filter);
-        
+    
+            outputVideo.on('finish', () => {
+                console.log("Uploading finish");
+                req.io.to(req.body.socketId).emit('removing-audio', {state: "finish", message:""});
+                res.sendStatus(200);
+            })
+
+        const start = params.start;
+        const end = params.end;
+            try{
+                ffmpeg(inputVideo)
+                .on("start", () => {
+                    console.log("removing audio start")
+                    console.time("start");
+                })
+                .on("end", async() => {
+                    console.log("Removing audio successfully")
+                    console.timeEnd("start");
+                    ProjectModel.findByIdAndUpdate(params.projectId, {videoId : data[data.length - 1]._id});
+                    let currentChunkSize = 0;
+                    let percentage = 0;
+                    let folder = path.join(__dirname, "..", "temp",`${params.projectId}`);
+                    const videoupload = fs.createReadStream(path.join(folder, `${params.projectId}${parseInt(req.body.historyIndex)+1}.webm`));
+                    videoupload.on("data", (chunk) => {
+                            currentChunkSize = chunk.length + currentChunkSize;
+                            percentage = ((currentChunkSize/ data[data.length - 1].length) * 100)
+                            console.log(percentage);
+                            req.io.to(req.body.socketId).emit('removing-audio', {state: 'start', message: `Uploading : ${percentage.toFixed(2)}%`});
+                        })
+                    videoupload.pipe(outputVideo);
+                    
+                })
+                .on("error", (error) => {
+                    console.log("Error", error);
+                }) 
+                .on("stderr", (stderr) => {
+                    console.log(stderr);
+                })
+                .outputFormat('webm')
+                .audioFilters(`volume=enable='between(t,${start},${end})':volume=0`)
+                .save(`temp/${params.projectId}/${params.projectId}${parseInt(req.body.historyIndex)+1}.webm`) 
+                
+            } catch (error) {
+                console.log("Error while removing audio: ", error);
+            }
         }
     }
 }

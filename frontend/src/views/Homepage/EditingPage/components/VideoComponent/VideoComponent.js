@@ -15,25 +15,18 @@ function VideoComponent () {
     const dispatch = useDispatch();
     const videoRef = useRef(null);
     const projectDetails = JSON.parse(localStorage.getItem("project-details"));
+    const history = useSelector((state) => state.history);
 
-
-    // socket.on("retrieve-start", (message) => {
-    //     dispatch(setLoading(true))
-    //     dispatch(setLoadingStatus(message));
-    // })
-    // socket.on("retrieve-end", () => {
-    //     dispatch(setLoading(false))
-    //     dispatch(setLoadingStatus(""));
-    // })
     useEffect(() => {
         if (globalState.isThereUploadedVideo === true) {
             setVideoLoading(true);
-            setVideoURL(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}`);
+            setVideoURL(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}/${history.currentHistoryIndex}`);
         } else {
             setVideoLoading(false);
             setVideoURL("");
         }
-    }, [globalState.isThereUploadedVideo]);
+    }, [globalState.isThereUploadedVideo, history.currentHistoryIndex]);
+
     const videoElement = videoRef.current;
     
     useEffect(() => {
@@ -80,7 +73,7 @@ function VideoComponent () {
     return(
         <div className="video-main-container">
             {videoLoading? (<LoadingComponent/>) : ""}
-            <video id="videoPlayer" className="video-controller-and-video-container" ref={videoRef} src={videoURL? videoURL : ""} type="video/mp4" controls >
+            <video id="videoPlayer" className="video-controller-and-video-container" ref={videoRef} src={videoURL? videoURL : ""} type="video/webm" controls duration = {"30.000181"} autoPlay>
                 <div className="video-controller-container">
                     video controller container
                 </div>

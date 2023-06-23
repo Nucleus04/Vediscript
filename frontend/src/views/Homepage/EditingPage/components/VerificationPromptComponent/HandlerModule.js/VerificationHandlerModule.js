@@ -1,19 +1,40 @@
-import { setVerified,  setIsVerifying } from "../../../../../../redux/EditingAction";
+import { setVerified,  setIsVerifying, setIsThereError } from "../../../../../../redux/EditingAction";
 import { setIsRemovingAudio, setIsThereCurrentOperation } from "../../../../../../redux/OperationAction";
 import { setAddHistory_RemoveAudio } from "../../../../../../redux/HistoryTrackerAction";
 import RequestToRemoveAudio from "./module/sendRequestRemoveAudio";
 
-function VerificationHandlerModule (dispatch, globalOperationState) {
-    const verify = () => {
-        dispatch(setVerified(true));
-        dispatch(setAddHistory_RemoveAudio(globalOperationState.initialRemovingData));
-        dispatch(setIsVerifying(false));
 
+function VerificationHandlerModule (dispatch, globalOperationState) {
+
+    const callback = (status) => {
+        if(status){
+            dispatch(setAddHistory_RemoveAudio(globalOperationState.initialRemovingData));
+            const error = {
+                state: true,
+                status: "success",
+                message: "Removing audio successfully!"
+            }
+            dispatch(setIsThereError(error));
+        } else {
+            const error = {
+                state: true,
+                status: "fail",
+                message: "Removing audio failed..."
+            }
+            dispatch(setIsThereError(error));
+        }
+    }
+    const verify = (historyIndex) => {
+        dispatch(setVerified(true));
+        dispatch(setIsVerifying(false));
+        dispatch(setIsThereCurrentOperation({state: false, operation: ""}));
+        dispatch(setIsRemovingAudio(false));
+        
         if(globalOperationState.isRemovingAudio){
             const data = globalOperationState.initialRemovingData;
             const start = data.start;
             const end = data.end;
-            RequestToRemoveAudio(start, end);
+            RequestToRemoveAudio(start, end, historyIndex, callback);
         }
 
     }

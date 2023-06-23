@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
 import "./style.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setVerified, setIsVerifying } from "../../../../../redux/EditingAction";
+import { setVerified, setIsVerifying, setLoading, setLoadingStatus } from "../../../../../redux/EditingAction";
 import { setAddHistory_RemoveAudio } from "../../../../../redux/HistoryTrackerAction";
 import VerificationHandlerModule from "./HandlerModule.js/VerificationHandlerModule";
-
+import socket from "../../../../../websocket/socket";
+import useShowVerificationModal from "./Hooks/useShowVerificationModa;";
 function VerificationPromptComponent () {
     const globalState = useSelector((state) => state.edit);
     const globalOperationState = useSelector((state) => state.operation);
-    const [showVerificationModal, setShowVerificationModal] = useState(false);
     const history = useSelector((state) => state.history);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        if(globalState.isVerifying) {
-            if(!globalState.isThereError.state)
-                setShowVerificationModal(true);
-        } else {
-            setShowVerificationModal(false);
+    const {showVerificationModal} = useShowVerificationModal(globalState);
+    socket.on('removing-audio', (data) => {
+        if(data.state === "start") {
+            dispatch(setLoadingStatus(data.message));
+            dispatch(setLoading(true));
         }
-    }, [globalState.isVerifying]);
-    console.log(history);
+        else{
+            dispatch(setLoading(false));
+            dispatch(setLoadingStatus(""));
+        }
+    });
+   
     const handleVerify = () => {
-        VerificationHandlerModule(dispatch, globalOperationState).verify();
+        VerificationHandlerModule(dispatch, globalOperationState).verify(history.currentHistoryIndex);
     }
     const handleCancel = () => {
         VerificationHandlerModule(dispatch, globalOperationState).cancel();

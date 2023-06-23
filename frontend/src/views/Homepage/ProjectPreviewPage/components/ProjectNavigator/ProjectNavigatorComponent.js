@@ -2,9 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import "./style.css";
 import { useDispatch } from "react-redux";
 import { setISEditingProjectDetail, setRetrieveProjectList } from "../../../../../redux/action";
+import { setIsThereUploadedVideo } from "../../../../../redux/EditingAction";
 import { DeleteProject } from "./module/deleteProject";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import getInitialInfo from "./module/getInitialInfo";
+import socket from "../../../../../websocket/socket";
+import { setLoading, setLoadingStatus } from "../../../../../redux/EditingAction";
 
 
 function ProjectNavigatorComponent ({ project }) {
@@ -13,6 +17,7 @@ function ProjectNavigatorComponent ({ project }) {
     const dispatch = useDispatch();
     const [ showMenuButton, setShowMenuButton ] =useState (false);
     const globalProjectState = useSelector((state) => state.projects);
+    const history = useSelector((state) => state.history);
     const navigate = useNavigate();
 
     const handleMenuClick = () => {
@@ -51,9 +56,26 @@ function ProjectNavigatorComponent ({ project }) {
         setShowMenuButton(false);
         dispatch(setRetrieveProjectList(!globalProjectState.isRetrieveNeed));
     }
+    socket.on('retrieving-project', (data) => {
+        console.log("Triggered");
+        if(data.state) {
+            dispatch(setLoading(true));
+            dispatch(setLoadingStatus(data.message));
+        } else {
+            dispatch(setLoading(false));
+            dispatch(setLoadingStatus(""));
+        }
+
+    })
+    const onResponse = (state) => {
+        console.log("Setting the uploadstate", state);
+        navigate(`/editing-page/${project._id}`);
+        dispatch(setIsThereUploadedVideo(state));
+    }
     const handleProjectSelect = () => {
         localStorage.setItem("project-details", JSON.stringify(project));
-        navigate(`/editing-page/${project._id}`);
+        console.log("retrieve");
+        getInitialInfo(onResponse, history.currentHistoryIndex);
     }
     const handleSelectAppropriateButton = (event) => {
         if(event.target.classList.contains("project-button") || event.target.classList.contains("bookmark-menu") || event.target.classList.contains("bookmark-design")) {

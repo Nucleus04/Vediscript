@@ -14,39 +14,44 @@ import InstructionComponent from "../components/InstructionComponent/Instruction
 import VerificationPromptComponent from "../components/VerificationPromptComponent/VerificationPromptComponent";
 
 import { useEffect, useState} from "react";
-import { setIsThereUploadedVideo } from "../../../../redux/EditingAction";
+import { initialInformation, setIsThereUploadedVideo } from "../../../../redux/EditingAction";
 import { useDispatch, useSelector} from "react-redux";
 import { undoChanges, redoChanges } from "../../../../redux/HistoryTrackerAction";
+import useUnload from "./hooks/useUnload";
+import useHistorySaver from "./hooks/useHistorySaver";
+import useCursorSetter from "./hooks/useCursorSetter";
+
+
 
 function EditingLayout () {
     const dispatch = useDispatch();
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
     const globalOperationState = useSelector((state) => state.operation);
     const history = useSelector((state) => state.history)
-    const [cursor, setCursor] = useState("auto");
+
+    
+    const cursor = useCursorSetter(globalOperationState);
+    useUnload(projectDetail);
+    useHistorySaver(history);  
+    
 
     socket.on("message", (data) => {
         console.log(data);
     })
-    const onResponse = (state, data) => {
+
+    const onResponse = (state) => {
         dispatch(setIsThereUploadedVideo(state));
     }
-    useEffect(()=> {
-        getInitialInfo(onResponse)
-    }, [])
 
-    useEffect(() => {
-        if(globalOperationState.isRemovingAudio) {
-            setCursor("not-allowed");
-        } else {
-            setCursor("auto");
-        }
-    }, [globalOperationState])
+    useEffect(()=> {
+        getInitialInfo(onResponse, history.currentHistoryIndex);
+    }, [])
 
     const handleUndo = () => {
         if(history.currentHistoryIndex > 0)
             dispatch(undoChanges());
     }
+
     const handleRedo = () => {
         if(history.history.length !== history.currentHistoryIndex + 1)
             dispatch(redoChanges());

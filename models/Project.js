@@ -15,6 +15,9 @@ const ProjectSchema = new mongoose.Schema({
         type: String, 
         required: true,
         trim: true,
+    },
+    videoId: {
+        type: String,
     }
 }, {timestamps : true});
 

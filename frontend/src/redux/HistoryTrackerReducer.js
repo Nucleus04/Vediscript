@@ -1,10 +1,9 @@
 const initialState = {
     currentState:{
         remove_audio:[],
+        transcription: [],
     },
-    history: [{
-        remove_audio:[],
-    }],
+    history: [],
     currentHistoryIndex: 0,
   
 }
@@ -38,6 +37,17 @@ export const HistoryTrackerReducer = (state = initialState, action) => {
                 },       
                 currentHistoryIndex: state.currentHistoryIndex + 1,
             }
+        case "RESET_HISTORY_INDEX":
+            return {
+                ...state,
+                currentHistoryIndex: 0,
+            }
+        case "ADD_INITIAL_REMOVE_AUDIO":
+            return {
+                ...state,
+                currentState: action.payload,
+                history: [action.payload],
+                }
         default:
             return state;
     }

@@ -52,6 +52,7 @@
     padding-right: 7px;
     word-wrap: break-word;
     transition: ease-in-out;
+    color: rgb(107, 107, 107);
 }
 .transcription::selection{
     background-color: rgb(123, 218, 104);

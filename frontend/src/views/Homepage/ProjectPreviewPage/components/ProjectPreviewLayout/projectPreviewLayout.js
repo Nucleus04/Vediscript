@@ -7,6 +7,7 @@ import { retrieveProject } from "./module/retrieveProjectList";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import socket from "../../../../../websocket/socket";
+import EditingLoadingComponent from "../../../../LoadingComponent.js/EditingLoadingComponent";
 
 function ProjectPreviewLayout () {
     const [projectList, setProjectList] = useState("");
@@ -26,6 +27,7 @@ function ProjectPreviewLayout () {
     return (
         <div className="project-preview-container">
             <NewProjectFormComponent/>
+            <EditingLoadingComponent/>
             <div className="project-preview-header">
                 <div className="logo-appname">
                     <img className="logo logo-container" src="Vediscript-logo.png" alt="Logo"/>

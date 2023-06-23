@@ -28,7 +28,7 @@ export const OperationReducer = (state = initialState, action) => {
                 ...state,
                 initialRemovingData: action.payload,
             }
-        case "RESET_STATE":
+        case "RESET_STATE_OPERATION":
             return initialState;
         default:
             return state;

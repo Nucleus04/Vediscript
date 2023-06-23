@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { useDispatch , useSelector} from "react-redux";
 import socket from "../../../../../websocket/socket";
 import getTranscription from "./module/getTranscription";
-import { useVideoRetriever, useWordHighlighter, useUndoRedoTranscript } from "./module/hooks";
+import { useVideoRetriever, useWordHighlighter, useUndoRedoTranscript, useModificationChecker, useCursorChanger } from "./module/hooks";
 import { HanddleWordClickModule, HandleInputChangeModule, SocketListenerModule, handleMouseUpCrossOuter, removeCrossOutInScript } from "./module/handlerModule";
 import { setIsVerifying } from "../../../../../redux/EditingAction";
 import { setIsRemovingAudio, setIsThereCurrentOperation, setRemoveDetails } from "../../../../../redux/OperationAction";
@@ -25,19 +25,13 @@ function TranscriptionComponent () {
     const [startTime, setStartTime] =useState("");
     const history = useSelector((state) => state.history);
 
-    useVideoRetriever(globalState, getTranscription, setScript);
+    useVideoRetriever(dispatch, globalState, getTranscription, setScript);
     useWordHighlighter(globalState);
     SocketListenerModule(socket, dispatch);
+    useModificationChecker(script, dispatch);
     useUndoRedoTranscript(history, removeCrossOutInScript, handleMouseUpCrossOuter);
-    let end = [], start = [];
-
-    useEffect(() => {
-       if(globalOperationState.isRemovingAudio) {
-            setCursor("crosshair");
-       } else {
-            setCursor("auto");
-       }
-    }, [globalOperationState.isRemovingAudio])
+    useCursorChanger(globalOperationState, setCursor);
+    
 
     const handleUploadClick = () => {
         fileInputRef.current.value = null;
@@ -49,19 +43,8 @@ function TranscriptionComponent () {
     }
 
     const handleWordClick = async(event) => {
-        HanddleWordClickModule(event, script, socketId, projectDetails, dispatch);
+        HanddleWordClickModule(event, script, socketId, projectDetails, dispatch, history);
     }
-
-    useEffect(() => {
-        if(startTime === undefined || endTime === undefined) {
-            const error = {
-                state: true,
-                status: "fail",
-                message: "Oops!, I didnt catch that, please try again",
-            }
-            dispatch(setIsThereError(error));
-        }
-    }, [startTime, endTime])
     const handleMouseUp = () => {
         if(globalOperationState.isRemovingAudio) {
             setIsSelectingWord(false)
@@ -77,7 +60,7 @@ function TranscriptionComponent () {
                 setIsSelectingWord(true)
         }
     }
-   
+
     const handleSelectedWord = (event) => {
         if(globalOperationState.isRemovingAudio) {
             if(isSelectingWord) { 
@@ -94,7 +77,7 @@ function TranscriptionComponent () {
         <div className="transcription-container" style={{cursor : cursor }} onMouseUp={handleMouseUp}>
             <div className={`transcription-container-inside ${globalState.isThereUploadedVideo? "" : "display-center-item" }`}>
                 <input type="file" ref ={fileInputRef} onChange={handleFileChange} style={{ display:"none"}}/>
-                {script ? script.data.map((item, index) => {
+                {script ? script.data.metadata.transcription.map((item, index) => {
                     return <span 
                             className={`${globalState.isThereUploadedVideo? "transcription" : "display-none" }`} 
                             key={index}

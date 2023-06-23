@@ -22,6 +22,11 @@ app.use((req, res, next) => {
 
 app.use("/", route());
 
+app.use((err, req, res, next) => {
+    console.error('An error occurred:', err);
+    res.status(500).send('Internal Server Error');
+});
+
 connectToMongoDb().then(() => {
     console.log("Successfully connected to mongodb");
 
@@ -34,6 +39,12 @@ connectToMongoDb().then(() => {
             credentials: true,
         }
     });
+
+    io.on("connection", (socket) => {
+        socket.on("unload", (data) => {
+            console.log("data before unload", data);
+        })
+    })
 }).catch((error) => {
     console.log(error);
 });

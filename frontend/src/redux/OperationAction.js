@@ -18,6 +18,6 @@ export const setRemoveDetails = (value) => {
 }
 export const resetOperation = () => {
     return {
-        type: "RESET_STATE",
+        type: "RESET_STATE_OPERATION",
     }
 }

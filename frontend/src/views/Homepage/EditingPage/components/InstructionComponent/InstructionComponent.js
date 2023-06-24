@@ -10,16 +10,19 @@ function InstructionComponent () {
     useEffect(() => {
         if(globalOperationState.isThereCurrentOperation.state === true) {
             setShowInstruction(true);
-            if(globalOperationState.isThereCurrentOperation.operation == constant.operation.remove_audio) {
+            if(globalOperationState.isThereCurrentOperation.operation === constant.operation.remove_audio) {
                 setInstruction("Select the word to be muted in the transcription box.");
             } 
+            if(globalOperationState.isThereCurrentOperation.operation === constant.operation.replace_audio){
+                setInstruction("Select the word to be replace in the transcription box.");
+            }
         } else {
             setShowInstruction(false);
         }
     }, [globalOperationState.isThereCurrentOperation]);
     return (
         <div className={`instruction-container ${showInstruction? "": "display-none"}`}>
-            <p>{instruction}</p>
+            <p>Instruction: {instruction}</p>
         </div>
     )
 }

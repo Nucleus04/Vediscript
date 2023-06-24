@@ -1,0 +1,24 @@
+.replace-button{
+    position: relative;
+}
+.replace-button-menu{
+    position: absolute;
+    width: 150px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    border-radius: 10px;
+    transform: translate(120px, 4px);
+}
+.display-none{
+    display: none;
+}
+.replace-button-menu-modal{
+    width: 85%;
+}
+
+.display-block{
+    display: block;
+}

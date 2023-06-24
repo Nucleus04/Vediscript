@@ -1,7 +1,7 @@
 import "./styles/style.css";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setSuccessEvent, setLoading,} from "../../redux/EditingAction";
+
 
 function EditingLoadingComponent () {
     const [showLoading, setShowLoading] = useState(false);
@@ -20,10 +20,6 @@ function EditingLoadingComponent () {
             setShowLoading(globalState.isLoading);
             setLoadingStatus(globalState.loadingStatus)
         }
-        // if(globalState.isThereSuccessEvent.state === true){
-        //     setSuccess(globalState.isThereSuccessEvent.state);
-        //     setSuccessMessage(globalState.isThereSuccessEvent.message);
-        // }
     }, [globalState]);
 
     

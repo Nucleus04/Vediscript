@@ -1,6 +1,6 @@
 import "./style.css";
 import ImportAudioComponent from "./components/ImportAudioComponent";
-import ReplaceAudioComponent from "./components/ReplaceAudioComponent";
+import ReplaceAudioComponent from "./components/Replace/ReplaceAudioComponent";
 import RemoveAudioComponent from "./components/RemoveAudioComponent";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

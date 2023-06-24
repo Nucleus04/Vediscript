@@ -20,6 +20,7 @@ import { undoChanges, redoChanges } from "../../../../redux/HistoryTrackerAction
 import useUnload from "./hooks/useUnload";
 import useHistorySaver from "./hooks/useHistorySaver";
 import useCursorSetter from "./hooks/useCursorSetter";
+import RecordAudioComponent from "../components/RecordAudioComponent/RecordAudioComponent";
 
 
 
@@ -58,6 +59,7 @@ function EditingLayout () {
     }
     return (
         <div className="main-editing-page-container" style={{cursor: cursor}}>
+            <RecordAudioComponent/>
             <StatusMessageComponent/>
             <EditingLoadingComponent/>
             <VerificationPromptComponent/>
@@ -71,7 +73,7 @@ function EditingLayout () {
                         <TextComponent/>
                         <div className="editing-menu-button" onClick={handleUndo}>Undo</div>
                         <div className="editing-menu-button" onClick={handleRedo}>Redo</div>
-                        {globalOperationState.isRemovingAudio? ( <CancelComponent/>) : ""}
+                        {globalOperationState.isThereCurrentOperation.state? ( <CancelComponent/>) : ""}
                     </div>
                 </div>
                 <InstructionComponent/>

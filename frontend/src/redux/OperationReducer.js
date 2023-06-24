@@ -1,6 +1,8 @@
 
 const initialState = {
     isRemovingAudio: false,
+    isReplacingAudio: false,
+    isShowRecordComponent: false,
     isThereCurrentOperation: {
         state: false,
         operation: "",
@@ -27,6 +29,16 @@ export const OperationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 initialRemovingData: action.payload,
+            }
+        case "SET_IS_REPLACING_AUDIO":
+            return {
+                ...state,
+                isReplacingAudio: action.payload,
+            }
+        case "SET_SHOW_RECORD_COMPONENT":
+            return {
+                ...state,
+                isShowRecordComponent: action.payload,
             }
         case "RESET_STATE_OPERATION":
             return initialState;

@@ -16,6 +16,18 @@ export const setRemoveDetails = (value) => {
         payload: value,
     }
 }
+export const setIsReplacingAudio = (value) => {
+    return {
+        type: "SET_IS_REPLACING_AUDIO",
+        payload: value,
+    }
+}
+export const setShowRecordComponent = (value) => {
+    return {
+        type: "SET_SHOW_RECORD_COMPONENT",
+        payload: value,
+    }
+}
 export const resetOperation = () => {
     return {
         type: "RESET_STATE_OPERATION",

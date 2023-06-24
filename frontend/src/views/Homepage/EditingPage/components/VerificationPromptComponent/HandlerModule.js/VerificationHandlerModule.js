@@ -1,5 +1,5 @@
 import { setVerified,  setIsVerifying, setIsThereError } from "../../../../../../redux/EditingAction";
-import { setIsRemovingAudio, setIsThereCurrentOperation } from "../../../../../../redux/OperationAction";
+import { setIsRemovingAudio, setIsThereCurrentOperation , resetOperation, setShowRecordComponent} from "../../../../../../redux/OperationAction";
 import { setAddHistory_RemoveAudio } from "../../../../../../redux/HistoryTrackerAction";
 import RequestToRemoveAudio from "./module/sendRequestRemoveAudio";
 
@@ -27,8 +27,12 @@ function VerificationHandlerModule (dispatch, globalOperationState) {
     const verify = (historyIndex) => {
         dispatch(setVerified(true));
         dispatch(setIsVerifying(false));
-        dispatch(setIsThereCurrentOperation({state: false, operation: ""}));
-        dispatch(setIsRemovingAudio(false));
+
+        if(globalOperationState.isReplacingAudio){
+            dispatch(setShowRecordComponent(true));
+        } else {
+            dispatch(resetOperation());
+        }
         
         if(globalOperationState.isRemovingAudio){
             const data = globalOperationState.initialRemovingData;
@@ -42,8 +46,8 @@ function VerificationHandlerModule (dispatch, globalOperationState) {
     const cancel = () => {
         dispatch(setVerified(false));
         dispatch(setIsVerifying(false));
-        dispatch(setIsRemovingAudio(false));
-        dispatch(setIsThereCurrentOperation({state: false, operation: ""}));
+        dispatch(resetOperation());
+       
     }
 
     return {

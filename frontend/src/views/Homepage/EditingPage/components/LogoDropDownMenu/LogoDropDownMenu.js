@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { resetEditingGlobalState } from "../../../../../redux/EditingAction";
 import { resetState } from "../../../../../redux/action";
 import { useDispatch } from "react-redux";
+import unload from "./module/unload";
 
 function LogoDropDownMenuComponent () {
     const [showDropDown, setShowDropDown] = useState(false);
@@ -26,6 +27,7 @@ function LogoDropDownMenuComponent () {
     const handleBeckToProject = () => {
         dispatch(resetEditingGlobalState());
         dispatch(resetState());
+        unload();
         navigate("/project-preview");
     }
 

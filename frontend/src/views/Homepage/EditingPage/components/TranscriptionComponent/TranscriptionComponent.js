@@ -46,7 +46,7 @@ function TranscriptionComponent () {
         HanddleWordClickModule(event, script, socketId, projectDetails, dispatch, history);
     }
     const handleMouseUp = () => {
-        if(globalOperationState.isRemovingAudio) {
+        if(globalOperationState.isRemovingAudio || globalOperationState.isReplacingAudio) {
             setIsSelectingWord(false)
             dispatch(setRemoveDetails({start: startTime, end: endTime}));
             dispatch(setIsVerifying(true));
@@ -54,7 +54,7 @@ function TranscriptionComponent () {
     }
 
     const handleMouseDown = (event) => {
-        if(globalOperationState.isRemovingAudio){
+        if(globalOperationState.isRemovingAudio || globalOperationState.isReplacingAudio){
                 setStartTime(event.target.getAttribute("data-start"));
                 setEndTime(event.target.getAttribute("data-end"));
                 setIsSelectingWord(true)
@@ -62,7 +62,7 @@ function TranscriptionComponent () {
     }
 
     const handleSelectedWord = (event) => {
-        if(globalOperationState.isRemovingAudio) {
+        if(globalOperationState.isRemovingAudio || globalOperationState.isReplacingAudio) {
             if(isSelectingWord) { 
                 if(parseFloat(event.target.getAttribute("data-start")) < parseFloat(startTime))
                     setStartTime(event.target.getAttribute("data-start"))

@@ -9,15 +9,15 @@ module.exports = () => {
     router.get("/:projectId/:sokcetId/:historyIndex", async(req, res, next) => {
         try {
             const socketId = req.params.sokcetId;
-        const projectId = req.params.projectId;
-        const historyIndex = req.params.historyIndex;
+            const projectId = req.params.projectId;
+            const historyIndex = req.params.historyIndex;
        
-        req.io.to(socketId).emit('retrieve-start', 'Retriving project...');
+            req.io.to(socketId).emit('retrieve-start', 'Retriving project...');
 
-        ChangeStream(projectId, req);
-        const bucket = GridFS((error) => {
-            console.log("Error in GridFs", error);
-        })
+            //ChangeStream(projectId, req);
+            const bucket = GridFS((error) => {
+                console.log("Error in GridFs", error);
+            })
         
         const cursor = await bucket.find({"metadata.projectId": projectId});
         let data = [];

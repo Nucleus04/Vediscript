@@ -8,8 +8,11 @@
     width: 50px;
     color: rgb(255, 255, 255);
     border-radius: 5px;
-    background-color: rgb(255, 69, 69);
+    background-color: rgb(255, 113, 113);
     cursor: default;
+    padding-left: 5px;
+    padding-right: 5px;
+    transition: ease-in-out 200ms;
 }
 
 .editing-menu-button-cancel:hover{

@@ -12,7 +12,13 @@ const getInitialInfo = require("./routeList/getInitialInfo");
 const getTranscription = require("./routeList/getTranscription");
 const removeAudio = require("./routeList/remove-audio");
 const unload = require("./routeList/unload");
-
+const replaceaudio = require("./routeList/replace-audio");
+const unlinkvideo = require("./routeList/unlink-video");
+const insertText = require("./routeList/insert-text");
+const importAudio = require("./routeList/import-audio");
+const getAssets = require("./routeList/getAssets");
+const audioStream = require("./routeList/audioStream");
+const replaceAudioLocal = require("./routeList/replace-audio-local");
 const router = express.Router();
 
 module.exports = () => {
@@ -28,5 +34,12 @@ module.exports = () => {
     router.use("/get-transcription", getTranscription());
     router.use("/remove-audio", authenticateToken(), removeAudio());
     router.use("/unload", unload());
+    router.use("/replace-audio",authenticateToken(), replaceaudio());
+    router.use("/unlink-video", unlinkvideo());
+    router.use("/insert-text", authenticateToken(), insertText());
+    router.use("/import-audio", authenticateToken(), importAudio());
+    router.use("/get-assets", authenticateToken(), getAssets());
+    router.use("/get-audio", audioStream());
+    router.use("/replace-audio-local",authenticateToken(), replaceAudioLocal());
     return router;
 }

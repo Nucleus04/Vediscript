@@ -20,7 +20,7 @@ function VideoComponent () {
     useEffect(() => {
         if (globalState.isThereUploadedVideo === true) {
             setVideoLoading(true);
-            setVideoURL(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}/${history.currentHistoryIndex}`);
+            setVideoURL(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}/${history.currentHistoryIndex}/${history.history.length}`);
         } else {
             setVideoLoading(false);
             setVideoURL("");
@@ -73,7 +73,7 @@ function VideoComponent () {
     return(
         <div className="video-main-container">
             {videoLoading? (<LoadingComponent/>) : ""}
-            <video id="videoPlayer" className="video-controller-and-video-container" ref={videoRef} src={videoURL? videoURL : ""} type="video/webm" controls duration = {"30.000181"} autoPlay>
+            <video id="videoPlayer" className="video-controller-and-video-container" ref={videoRef} src={videoURL? videoURL : ""} type="video/mp4" controls >
                 <div className="video-controller-container">
                     video controller container
                 </div>

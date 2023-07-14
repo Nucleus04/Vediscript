@@ -20,6 +20,23 @@ class UploadController {
         });
         return upload;
     }
+
+    handleAudioFileviaMulter = () => {
+        console.log("Hi, i am cheking your audio files");
+        const upload = multer({
+            dest:"uploads/audio",
+            fileFilter: (req, file, cb) => {
+                if (file.mimetype.startsWith('audio/')) {
+                cb(null, true);
+                } else {
+                cb(new Error('Only audio files are allowed!'), false);
+                }
+            },
+    
+        });
+        return upload;
+    }
+    
     uploadErrorChecker = () => {
 
         const UploadErrorChecker = (err, req, res, next) => {

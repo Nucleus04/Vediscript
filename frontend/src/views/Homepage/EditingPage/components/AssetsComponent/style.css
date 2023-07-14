@@ -1,0 +1,128 @@
+.assets-maincontainer{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    font-family: inherit;
+}
+.assets-modal{
+    width: 350px;
+    height: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.assets-tittle{
+    font-weight: 600;
+    padding-left: 20px;
+    color: rgb(34, 118, 34);
+    position: relative;
+}
+.assets-audio-player{
+    position: absolute;
+    width: 220px;
+    height: 30px;
+    transform: translate(121px, -37px);
+}
+.asset-audio-controls{
+    width: 100%;
+    height: 100%;
+}
+.assets-audio-video-button-continer{
+    margin-left: 20px;
+}
+.assets-audio-video-button-continer button{
+    font-family: inherit;
+    background-color: rgb(66, 192, 66);
+    border: none;
+    height: 25px;
+    width: 90px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: white;
+    transition: ease-in-out 300ms;
+}
+.assets-audio-video-button-continer button:hover{
+    transform: scale(1.05);
+}
+.assets-audio-video-button-continer button:nth-child(2){
+    font-family: inherit;
+    background-color: rgb(66, 192, 66);
+    border: none;
+    height: 25px;
+    width: 25px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: white;
+    margin-left: 5px;
+    margin-top: 10pxpx;
+    background-image: url('../../../../../../public/refresh.png');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    color:  rgb(66, 192, 66);;
+}
+.assests-item-maincontainer{
+    width: 100%;
+    height: 275px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+}
+.assets-item-container{
+    width: 86%;
+    max-width: 100%;
+    display: flex;
+    height: 100%;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    overflow-y: scroll;
+    overflow: auto;
+}
+.assets-item{
+    width: 60px;
+    height: 75px;
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+.assets-item-logo{
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    background-color: rgb(222, 222, 222);
+    background-image: url(../../../../../../public/music-logo.png);
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: ease-in-out 200ms;
+}
+.assets-item-logo:hover{
+    transform: scale(1.05);
+}
+.assets-item-filename{
+    font-size: 9pt;
+    overflow: hidden;
+    width: 100%;
+}
+.assets-filename {
+    white-space: nowrap;
+    animation: scrollText 8s linear infinite;
+}
+.display-none{
+    display: none;
+}
+@keyframes scrollText {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+}

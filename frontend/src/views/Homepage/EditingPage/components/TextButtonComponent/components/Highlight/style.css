@@ -1,0 +1,46 @@
+.highlight-button{
+    position: relative;
+}
+.color-picker-container{
+    position: absolute;
+    height: 30px;
+    width: 110px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    background-color: white;
+    border-radius: 10px;
+    translate: 120px -24px;
+    display: flex;
+    align-items: center;
+}
+.color{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-left: 12px;
+    border: 1px solid rgb(110, 110, 110);
+}
+
+.redd{
+    background-color:  rgba(255, 70, 246, 0.971);;
+}
+
+.bluee{
+    background-color:  #00eeff;
+}
+
+.yelloww{
+    background-color: yellow;;
+}
+.redd:hover{
+    transform: scale(1.20);
+}
+.bluee:hover{
+    transform: scale(1.20);
+}
+.yelloww:hover{
+    transform: scale(1.20);
+}
+
+.display-none{
+    display: none;
+}

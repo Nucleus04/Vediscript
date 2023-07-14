@@ -1,12 +1,14 @@
 .instruction-container{
     background-color: rgb(96, 166, 68);
-    width: 350px;
+
     color: white;
     text-align: center;
     font-weight: 600;
     margin-left: 20px;
     font-size: 10pt;
     border-radius: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 .display-none{
     display: none;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./style.css";
 import { useDispatch } from "react-redux";
-import { setIsReplacingAudio, setIsThereCurrentOperation } from "../../../../../../../redux/OperationAction";
+import { setIsReplacingAudio, setIsThereCurrentOperation, setIsReplacingViaLocal } from "../../../../../../../redux/OperationAction";
 import constants from "../../../../../../../constant/constant";
 
 function ReplaceAudioComponent () {
@@ -20,12 +20,19 @@ function ReplaceAudioComponent () {
         dispatch(setIsThereCurrentOperation({state: true, operation: constant.operation.replace_audio}));
         setShowReplaceMenu(false);
     }
+    const handleLocalCLick = () => {
+        console.log("Replacing Audio...");
+        dispatch(setIsReplacingAudio(true));
+        dispatch(setIsThereCurrentOperation({state: true, operation: constant.operation.replace_audio}));
+        dispatch(setIsReplacingViaLocal(true));
+        setShowReplaceMenu(false);
+    }
     return (
         <div className="replace-button">
             <div className={`replace-button-menu ${showReplaceMenu? "" : "display-none"}`} onMouseEnter={handleMouseEnter} >
                 <div className="replace-button-menu-modal">
                     <button className="audio-child-button display-block" onClick={handleRecordClick}>Record</button>
-                    <button className="audio-child-button display-block">Local</button>
+                    <button className="audio-child-button display-block" onClick={handleLocalCLick}>Local</button>
                 </div>
             </div>
             <button className="audio-child-button red" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Replace</button>

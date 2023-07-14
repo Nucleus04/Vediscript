@@ -1,10 +1,13 @@
 import socket from "../../../../../../../websocket/socket";
 
-const RequestToRemoveAudio = async(start, end, historyIndex, callback) => {
+const RequestToRemoveAudio = async(start, end, history, callback) => {
     const token = localStorage.getItem("authToken");
     const socketId  = socket.id;
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
-    console.log(historyIndex);
+    console.log(history);
+    let historyIndex = history.currentHistoryIndex;
+    let numberOfChanges = history.history.length;
+    console.log("History index and no changes",historyIndex, numberOfChanges);
     let data = {
         start: start,
         end: end,
@@ -12,7 +15,7 @@ const RequestToRemoveAudio = async(start, end, historyIndex, callback) => {
         historyIndex: historyIndex,
     }
    try {
-    const response = await fetch(`http://localhost:5000/remove-audio/${projectDetail._id}`, {
+    const response = await fetch(`http://localhost:5000/remove-audio/${projectDetail._id}/${numberOfChanges}`, {
         method: "POST",
         headers:{
             "Content-Type" : "application/json",
@@ -22,7 +25,8 @@ const RequestToRemoveAudio = async(start, end, historyIndex, callback) => {
     })
     if (response.ok) {
         console.log("Request Successful");
-        callback(true);
+        const script = await response.json();
+        callback(true, script);
     } else {
         console.log("There somthing wrong");
         callback(false);

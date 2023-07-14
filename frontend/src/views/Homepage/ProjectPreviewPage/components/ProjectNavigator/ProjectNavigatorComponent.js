@@ -51,13 +51,14 @@ function ProjectNavigatorComponent ({ project }) {
         }
         dispatch(setISEditingProjectDetail(editingData));
     }
-    const handleDeleteButton = () => {
-        DeleteProject(project._id);
-        setShowMenuButton(false);
+    const deleteCallback = () => {
         dispatch(setRetrieveProjectList(!globalProjectState.isRetrieveNeed));
     }
+    const handleDeleteButton = () => {
+        DeleteProject(project._id, deleteCallback);
+        setShowMenuButton(false);
+    }
     socket.on('retrieving-project', (data) => {
-        console.log("Triggered");
         if(data.state) {
             dispatch(setLoading(true));
             dispatch(setLoadingStatus(data.message));

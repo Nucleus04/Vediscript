@@ -1,148 +1,140 @@
 import { useEffect, useState } from "react";
 import "./style.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import useShowComponent from "./hooks/useShowComponent";
+import { setShowRecordComponent, resetOperation } from "../../../../../redux/OperationAction";
+import { setIsThereError, setLoading, setLoadingStatus } from "../../../../../redux/EditingAction";
+import { addReplaceAudioHistory } from "../../../../../redux/HistoryTrackerAction";
+import startRecording from "./module/startRecordModule";
+import useCountdown from "./hooks/useCountdown";
+import socket from "../../../../../websocket/socket";
+import submitAudio from "./module/submitRecord";
 
 function RecordAudioComponent () {
     const globalOperationState = useSelector((state) => state.operation);
     const showRecordComponent = useShowComponent(globalOperationState);
+    const history = useSelector((state) => state.history);
+    const dispatch = useDispatch();
     const [showCountdown, setShowCountdown] = useState(false)
     const [isStart, setIsStart] = useState(false);
     const [countdown, setCountdown] = useState(3);
-
+    const [audioURL, setAudioURL] = useState("");
     const [audioChunks, setAudioChunks] = useState([]);
-    let mediaRecorder;
     const [counter, setCounter] = useState("");
-    useEffect(() => {
-        setCounter(globalOperationState.initialRemovingData.end);
-    }, [globalOperationState.initialRemovingData])
-    console.log(counter);
-    const handleStart = async() => {
-        try {
-            const getUserPermision =  await navigator.mediaDevices.getUserMedia({audio: true});
+    const [timeData, setTimeData] = useState("");
+    const [startButtonLabel, setStartButtonLabel] = useState("Start");
+    const [isReset, setIsReset] = useState(false);
+    useCountdown(setCounter, setIsStart, counter, isStart);
 
-            if(getUserPermision) {
-                mediaRecorder = new MediaRecorder(getUserPermision);
-                console.log("started");
-                mediaRecorder.start();
-            
-               
+    socket.on('replacing-audio', (data) => {
+        if(data.state === "start") {
+            dispatch(setLoadingStatus(data.message));
+            dispatch(setLoading(true));
+            dispatch(setShowRecordComponent(false));
 
-                console.log(mediaRecorder.state);
-
-                mediaRecorder.addEventListener("start", () => {
-                    setIsStart(true);
-                    console.log("Recording actually start");
-                })
-
-
-                
-
-
-            const dataPromise = new Promise((resolve) => {
-                mediaRecorder.ondataavailable = (event) => {
-                  console.log("------", event.data);
-                  audioChunks.push(event.data); // Add data to audioChunks array
-                }
-                mediaRecorder.onstop= () => {
-                    console.log("Stopppppped");
-                    console.log(audioChunks);
-                    console.log("Stopppppped");
-                    resolve();
-                   
-                }
-            });
-            setTimeout(async() =>{
-                mediaRecorder.stop();
-                await dataPromise;
-
-                const blob = new Blob(audioChunks, { type: 'audio/mp4' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'recorded_audio123.mp4';
-                a.click();
-                URL.revokeObjectURL(url);
-            }, counter * 1000)
-            }
-
-        } catch (error) {
-            console.log("There is error on recording video", error);
         }
-
-
-
-      
-    }
-
-    const handleStop = () => {
-        if(mediaRecorder)
-            mediaRecorder.stop();
-    }
-
-    // useEffect(() => {
-    //     if (countdown > -1 && showCountdown) {
-    //         const timer = setInterval(() => {
-    //             setCountdown(prevCountdown => prevCountdown - 1);
-    //         }, 1000);
-    
-    //         return () => {
-    //             clearInterval(timer);
-    //         };
-    //     } else {
-    //         setShowCountdown(false);
-    //         setIsStart(true);
-    //     }
-    // }, [countdown, showCountdown]);
-
-    
-    // const startRecording = () => {
-    //     navigator.mediaDevices.getUserMedia({audio: true})
-    //     .then(stream => {
-    //         mediaRecorder = new MediaRecorder(stream);
-    //         mediaRecorder.start();
-
-    //         console.log("Stream", stream);
-
-    //         mediaRecorder.addEventListener('dataavailable', event => {
-    //             console.log(event.data);
-    //             setAudioChunks(prevChunks => [...prevChunks, event.data]);
-    //         });
-        
-    //     })
-    //     .catch(error => {
-    //         console.log("Error in recording", error);
-    //     })
-
-    // }      
-
-    // const stopRecording = () => {
-    //     if(mediaRecorder)
-    //         mediaRecorder.stop();
-        
-    // }
-
-    // useEffect(() => {
-    //     if(isStart){
-    //         startRecording();
-    //         console.log("start");
-    //     }
-    // }, [isStart])
+        else{
+            dispatch(setLoading(false));
+            dispatch(setLoadingStatus(""));
+        }
+    });
 
     useEffect(() => {
-        let count = 0;
-        count = counter - 0.100;
-        if(count >= 0.00 && isStart){
+        let time = globalOperationState.initialRemovingData.end - globalOperationState.initialRemovingData.start;
+        setCounter(time.toFixed(1));
+        setTimeData(time.toFixed(1));
+    }, [globalOperationState.initialRemovingData]);
+
+    useEffect(() => {
+        if(isReset && audioURL !== ""){
+            setAudioChunks([]);
+            setAudioURL("");
+            setStartButtonLabel("Start");
+        }
+    }, [audioURL, isReset])
+
+    const handleStart = () => {
+        setStartButtonLabel("Start");
+        setIsReset(false);
+        setShowCountdown(true);
+
+    }
+    const handleReset = () => {
+        setCounter(timeData);
+        setIsStart(false)
+        setIsReset(true);
+        setCountdown(3);
+        setAudioChunks([]);
+        setStartButtonLabel("Start");
+        setShowCountdown(false); 
+    }
+    const handleCancel = () => {
+        setIsStart(false)
+        setAudioChunks([]);
+        setCountdown(3);
+        setShowCountdown(false);
+        setCounter("");
+        setAudioURL("");
+        setStartButtonLabel("Start");
+        dispatch(setShowRecordComponent(false)); 
+        dispatch(resetOperation());
+    }
+
+    useEffect(() => {
+        if (countdown >= 0 && showCountdown) {
+            if(countdown === 0){
+                console.log("Calling recording");
+                startRecording(setIsStart, audioChunks, setAudioURL, setStartButtonLabel, counter);
+            }
             const timer = setInterval(() => {
-                setCounter(count.toFixed(1));
-            }, 100)
+                setCountdown(prevCountdown => prevCountdown - 1);
+            }, 1000);
     
             return () => {
                 clearInterval(timer);
-            }
+            };
+        } else {
+            setShowCountdown(false);
         }
-    },[counter, isStart])
-    // console.log(audioChunks);
+    }, [countdown, showCountdown]);
+    
+    const onResponse = (state, data) => {
+        if(state){
+            dispatch(addReplaceAudioHistory(data.script))
+            const error = {
+                state: true,
+                status: "success",
+                message: "Replacing audio successfully!"
+            }
+            dispatch(setIsThereError(error));
+        } else{
+            const error = {
+                state: false,
+                status: "fail",
+                message: "Removing audio failed..."
+            }
+            dispatch(setIsThereError(error));
+        }  
+        setIsStart(false)
+        setAudioChunks([]);
+        setCountdown(3);
+        setShowCountdown(false);
+        setCounter("");
+        setAudioURL("");
+        setStartButtonLabel("Start");
+        dispatch(setShowRecordComponent(false)); 
+        dispatch(resetOperation());
+    }
+    const handleSubmit = () => {
+        submitAudio(
+            audioChunks,
+            globalOperationState.initialRemovingData.start,
+            globalOperationState.initialRemovingData.end,
+            history.currentHistoryIndex,
+            onResponse,
+            history,
+            );
+    }
     return(
         <div className={`record-audio-modal-container ${showRecordComponent? "" : "display-none"}`}>
             <div className={`countdown-record-container ${showCountdown? "" : "display-none"}`}>
@@ -155,11 +147,11 @@ function RecordAudioComponent () {
                 <div className="record-audio-display-contianer">
                     <p>Record</p>
                     <h2 className="record-audio-counter">{counter}s</h2>
-                    <div className="audio-player-container"><audio src="" controls aria-disabled></audio></div>
+                    <div className="audio-player-container"><audio src={audioURL} controls aria-disabled></audio></div>
                     <div className="record-audio-button-container">
-                        <button className="record-audio-button" onClick={handleStart}>Start</button>
-                        <button className="record-audio-button" onClick={handleStop}>Stop</button>
-                        <button className="record-audio-button">Reset</button>
+                        <button className="record-audio-button" onClick={startButtonLabel === "Start" ? handleStart : handleSubmit} disabled={isStart? true : false}>{startButtonLabel}</button>
+                        <button className="record-audio-button" onClick={handleReset}>Reset</button>
+                        <button className="record-audio-button" onClick={handleCancel}>Cancel</button>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,61 @@
+.insert-text-main-container{
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(2px);
+    background-color: rgb(159, 159, 159, 0.3);
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.insert-text-input-container{
+    width: 500px;
+    height: 300px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+}
+.insert-text-contain-center{
+    width: 90%;
+    height: 100%;
+}
+.insert-text-textarea{
+    margin-top: 20px;
+    border-radius: 10px;
+    width: 100%;
+    height: 70%;
+    border-width: 1px;
+    font-family: inherit;
+}
+.insert-text-button-container{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+.insert-text-button{
+    height: 40px;
+    margin-left: 5px;
+    margin-left: 5px;
+    width: 120px;
+    border: none;
+    border-radius: 20px;
+    font-family: inherit;
+    font-weight: 600;
+}
+.insert-text-button:first-child{
+    background-color:  rgb(104, 233, 89);
+}
+.insert-text-button:nth-child(2){
+    background-color: rgb(152, 152, 152);
+}
+.insert-text-button:first-child:hover{
+    background-color:  rgb(46, 188, 30);
+}
+.insert-text-button:nth-child(2):hover{
+    background-color: rgb(109, 109, 109);
+}
+.display-none{
+    display: none;
+}

@@ -58,6 +58,12 @@ export const setVerified = (value) => {
         payload: value,
     }
 }
+export const setShowAssests = (value) => {
+    return {
+        type: "SET_SHOW_ASSETS",
+        payload: value,
+    }
+}
 export const resetEditingGlobalState = () => {
     return {
         type: "RESET_STATE",

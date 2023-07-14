@@ -15,7 +15,6 @@ module.exports = () => {
             for await(const element of cursor) {
                 data.push(element);
             };
-
             res.status(200).json({message: "Your connected", data: data[data.length - 1]})
         } else {
             res.status(400).json({message: "Transcription not found"})

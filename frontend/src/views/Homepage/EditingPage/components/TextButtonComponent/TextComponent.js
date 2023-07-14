@@ -1,6 +1,6 @@
 import "./style.css";
-import EditTextComponent from "./components/EditTextComponent";
-import HighlightTextComponent from "./components/HighlightTextComponent";
+import EditTextComponent from "./components/Edit/EditTextComponent";
+import HighlightTextComponent from "./components/Highlight/HighlightTextComponent";
 import { useState } from "react";
 
 function TextComponent () {

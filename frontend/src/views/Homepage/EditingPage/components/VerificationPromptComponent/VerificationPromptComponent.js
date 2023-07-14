@@ -29,7 +29,7 @@ function VerificationPromptComponent () {
     });
    
     const handleVerify = () => {
-        VerificationHandlerModule(dispatch, globalOperationState).verify(history.currentHistoryIndex);
+        VerificationHandlerModule(dispatch, globalOperationState).verify(history);
     }
     const handleCancel = () => {
         VerificationHandlerModule(dispatch, globalOperationState).cancel();

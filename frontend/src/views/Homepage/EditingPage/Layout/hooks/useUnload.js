@@ -3,19 +3,24 @@ import { useEffect } from "react";
 function useUnload (projectDetail) {
     useEffect(() => {
         const handleUnload = async() => {
-            const history = JSON.parse(localStorage.getItem("history"));
-            const body = {
-                history: history,
-                projectDetail: projectDetail,
+            try {
+                const history = JSON.parse(localStorage.getItem("history"));
+                const body = {
+                    history: history,
+                    projectDetail: projectDetail,
+                    operation: "RELOAD",
+                }
+                await fetch("http://localhost:5000/unload", {
+                method: "POST",
+                headers:{
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify(body),
+                })
+                localStorage.removeItem("history");
+            } catch (error) {
+                console.log(error);
             }
-            fetch("http://localhost:5000/unload", {
-            method: "POST",
-            headers:{
-                "Content-Type" : "application/json",
-            },
-            body: JSON.stringify(body),
-            })
-            localStorage.removeItem("history");
         }
         window.addEventListener("beforeunload", handleUnload);
       

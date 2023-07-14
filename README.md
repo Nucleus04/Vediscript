@@ -2,7 +2,7 @@
  Light weight video editing app on the go
 
 # api start
-    - npm rundev/npm start : in root directory
+    - npm start : in root directory
 # front end start
     - npm start : cd to /frontend dir
 

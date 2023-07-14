@@ -3,11 +3,11 @@ const router = express.Router();
 const projectController = require("../../controller/ProjectController");
 
 module.exports = () => {
-    router.post("/", (req, res) => {
+    router.post("/", async(req, res) => {
         const {projectId} = req.body;
         const project = new projectController();
         try {
-            project.delete(projectId);
+            await project.delete(projectId);
             res.sendStatus(200);
         } catch (error) {
             console.log("There is error in deleting the project: ", error);

@@ -9,7 +9,7 @@ const UploadVideo = async(file, onErrorResponse, onLoading, onSuccessResponse) =
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
     formdata.append("projectId", projectDetail._id);
   
-    if(file.type === "video/mp4") {
+    if(file.type === "video/mp4" || file.type === "video/webm") {
         try {
             onLoading(true);
             const response  = await fetch("http://localhost:5000/upload-video", {

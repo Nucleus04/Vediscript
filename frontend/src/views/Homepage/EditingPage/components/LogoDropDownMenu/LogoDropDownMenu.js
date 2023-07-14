@@ -5,6 +5,8 @@ import { resetEditingGlobalState } from "../../../../../redux/EditingAction";
 import { resetState } from "../../../../../redux/action";
 import { useDispatch } from "react-redux";
 import unload from "./module/unload";
+import { resetHistoryIndex } from "../../../../../redux/HistoryTrackerAction";
+import socket from "../../../../../websocket/socket";
 
 function LogoDropDownMenuComponent () {
     const [showDropDown, setShowDropDown] = useState(false);
@@ -23,29 +25,40 @@ function LogoDropDownMenuComponent () {
     }
     const handleHoverLeave = () => {
         setShowFileDropDown(false);
+        setShowDropDown(false);
     }
     const handleBeckToProject = () => {
         dispatch(resetEditingGlobalState());
         dispatch(resetState());
-        unload();
+        dispatch(resetHistoryIndex());
+        unload("EXIT");
         navigate("/project-preview");
     }
-
+    const handleSave = () => {
+        setShowFileDropDown(false);
+        setShowDropDown(false);
+        unload("SAVE", socket.id);
+    }
+    const handleDownload = () => {
+        setShowFileDropDown(false);
+        setShowDropDown(false);
+        unload("DOWNLOAD", socket.id);
+    }
     return (
        <div className="logo-menu-container">
             <div className="logo-dropdown" onClick={handleDropDownMenu}>
                 <img className="edit-logo-container" src="/Vediscript-logo.png" width={40} height={40} alt="Logo"/>
                 <img className="dropdown-icon-logo" src="/dropdown.png" width={12} height={20}/>
             </div>
-            <div className={`logo-dropdown-modal ${showDropDown? "": "display-none"}`} ref={menuRef}>
+            <div className={`logo-dropdown-modal ${showDropDown? "": "display-none"}`} ref={menuRef} onMouseLeave={handleHoverLeave}>
                 <div className="logo-dropdown-button-container">
                     <div className="logo-dropdown-button-center">
                         <button className="back-to-project" onClick={handleBeckToProject}>Back to Projects...</button>
                         <button className="file-menu-button" onMouseEnter={handleHoverEnter}>File</button>
                         <div className={`file-menu-button-dropdown-container  ${showFileDropdown? "": `display-none`}`} onMouseLeave={handleHoverLeave}>
                             <div className="logo-dropdown-button-center">
-                                <button className="save-button">Save</button>
-                                <button className="download-button">Download</button>
+                                <button className="save-button" onClick={handleSave}>Save</button>
+                                <button className="download-button" onClick={handleDownload}>Download</button>
                             </div>
                         </div>
                     </div>

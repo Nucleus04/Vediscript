@@ -4,7 +4,6 @@ const getInitialInfo = async(callback, historyIndex) => {
 
     const token = localStorage.getItem("authToken");
     const socketId = socket.id;
-    console.log(historyIndex);
     const projectDetail = JSON.parse(localStorage.getItem("project-details"));
     const data = {
         socketId: socketId,

@@ -2,6 +2,7 @@ import "./style.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsThereError } from "../../../../../redux/EditingAction";
 import useShowStatusModal from "./hooks/useShowStatusModal";
+import { resetOperation } from "../../../../../redux/OperationAction";
 
 function StatusMessageComponent () {
     
@@ -16,6 +17,7 @@ function StatusMessageComponent () {
             message: "",
         }
         dispatch(setIsThereError(error));
+        dispatch(resetOperation());
     }
     return(
         <div className={`status-message-main-container ${showErrorModal? "" : `display-none`}`}>

@@ -1,26 +1,26 @@
 //import { useDispatch } from "react-redux";
 import { setPlaybackTime, setIsNavigatingTroughScript, setCurrentVideoTimestamp,setLoadingStatus, setIsThereError, setIsThereUploadedVideo, setLoading } from "../../../../../../redux/EditingAction";
 import UploadVideo from "./uploadVideo";
+import { setIsInserting } from "../../../../../../redux/OperationAction";
+
+
 export const HanddleWordClickModule = async(event, script, socketId, projectDetails, dispatch, history) => {
-    //const dispatch = useDispatch();
     let second = parseFloat(event.target.dataset.start);
-        let bit_rate = script.data.metadata.bitrate;
-        let range = Math.floor((bit_rate * second) / 8);
-        console.log("bitrate",bit_rate);
-        dispatch(setPlaybackTime(event.target.dataset.start));
-        dispatch(setIsNavigatingTroughScript(true));
-        dispatch(setCurrentVideoTimestamp(parseFloat(event.target.dataset.start)));
-        try {
-            await fetch(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}/${history.currentHistoryIndex}`, {
-                headers: {
-                    Range: `bytes=${parseInt(range)}-`,
-                }
-            })
-            return;
-        } catch (error) {
-            console.log("Error on jumping to the video")
-            return;
-        }
+    let bit_rate = script.data.metadata.bitrate;
+    let range = Math.floor((bit_rate * second) / 8);
+    dispatch(setPlaybackTime(event.target.dataset.start));
+    dispatch(setIsNavigatingTroughScript(true));
+    dispatch(setCurrentVideoTimestamp(parseFloat(event.target.dataset.start)));
+    try {
+        console.log("I will request video - handler")
+        await fetch(`http://localhost:5000/video-display/${projectDetails._id}/${socketId}/${history.currentHistoryIndex}/${history.history.length}`, {
+            headers: {
+                Range: `bytes=${parseInt(range)}-`,
+            }
+        })
+    } catch (error) {
+        console.log("Error on jumping to the video")
+    }
 }
 
 export const HandleInputChangeModule = (event, dispatch) => {
@@ -87,11 +87,38 @@ export const handleMouseUpCrossOuter = (startTime, endTime) => {
     }
 }
 
-export const removeCrossOutInScript = () => {
+export const handleMouseUpHighlight = (startTime, endTime, color) => {
     const targetWord = Array.from(document.querySelectorAll(`.transcription-container-inside span`));
+    let foundTheFirstWord = false;
+    const start = parseFloat(startTime);
+    const end = parseFloat(endTime);
+   
+
     for (let i = 0; i < targetWord.length; i++) {
-        targetWord[i].classList.remove('cross-out');
-        targetWord[i].classList.remove('red-color-text');
+        let targetStart = parseFloat(targetWord[i].getAttribute("data-start"));
+        let targetEnd = parseFloat(targetWord[i].getAttribute("data-end"))
+        if ( targetStart >= start && targetEnd <= end) {
+            targetWord[i].classList.add(color);
+        } 
+        if (foundTheFirstWord === true) {
+            targetWord[i].classList.add(color);
+            if (targetWord[i].getAttribute("data-end") === endTime) {
+            break;
+            }
+        }
     }
 }
 
+export const removeCrossOutInScript = () => {
+    const targetWord = Array.from(document.querySelectorAll(`.transcription-container-inside span`));
+    for (let i = 0; i < targetWord.length; i++) {
+        targetWord[i].classList.remove(targetWord[i].classList.item(1));
+    }
+}
+
+export const handleInsertSelect = (event, dispatch) => {
+    console.log("Selectning target word for insert")
+    const endTime = event.target.dataset.end;
+    console.log("The text will insert after :", endTime);
+    dispatch(setIsInserting({state: true, endTime: endTime}));
+}

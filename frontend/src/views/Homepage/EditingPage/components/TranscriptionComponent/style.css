@@ -7,6 +7,17 @@
     justify-content: center;
     align-items: center;
     font-weight: 600;
+    position: relative;
+}
+.saving-prompt{
+    position: absolute;
+    background-color: #5db24a;
+    padding: 3px 10px 3px 10px;
+    top: 0;
+    transform: translate(0px, -50%);
+    color: white;
+    border-radius: 5px;
+
 }
 .transcription-container-inside{
     overflow: auto;
@@ -40,10 +51,12 @@
     color: white;
     font-family: inherit;
     font-weight: 600;
+    transition: ease-in-out 100ms;
 }
 .uplaod-button:hover{
     background-color: rgb(70, 155, 66);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
 }
 .transcription{
     border-radius: 5px;
@@ -65,4 +78,15 @@
 
 .red-color-text{
     color: rgb(247, 88, 88);
+}
+.blue-highlight{
+    color: #00eeff;
+}
+
+.red-highlight{
+    color: rgba(255, 70, 246, 0.971);
+}
+
+.yellow-highlight{
+    color: yellow;
 }

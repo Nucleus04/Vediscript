@@ -19,7 +19,18 @@ export const resetHistoryIndex = () => {
         type: "RESET_HISTORY_INDEX"
     }
 }
-
+export const addReplaceAudioHistory = (value) => {
+    return {
+        type: "ADD_REPLACE_AUDIO_HISTORY",
+        payload: value
+    }
+}
+export const addHighlight = (value) => {
+    return {
+        type: "ADD_HIGHLIGHT_HISTORY",
+        payload: value
+    }
+}
 export const addInitialRemoveAudio = (value) => {
     return {
         type: "ADD_INITIAL_REMOVE_AUDIO",

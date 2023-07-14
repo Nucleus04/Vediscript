@@ -1,5 +1,5 @@
 
-export const DeleteProject = async(projectId) => {
+export const DeleteProject = async(projectId, onResponse) => {
     const data = {
         projectId: projectId,
     }
@@ -16,9 +16,11 @@ export const DeleteProject = async(projectId) => {
 
         if(response.ok) {
             console.log("Success!");
+            onResponse();
         }
         else {
             console.log("There is something wrong...");
+            onResponse();
         }
     } catch (error) {
         console.log("There Has been an error", error);

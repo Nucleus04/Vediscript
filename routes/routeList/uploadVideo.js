@@ -5,14 +5,14 @@ const ffmpegPath = require("@ffmpeg-installer/ffmpeg");
 const UploadController = require("../../controller/UploadController");
 const videoManipulator = require("../../controller/VideoManipulator");
 const TranscriptionController = require("../../controller/TranscriptionController");
-const fs = require("fs");
+const fs = require("fs-extra");
 const GridFS = require("../../models/GridFS");
 ffmpeg.setFfmpegPath(ffmpegPath.path);
 const ProjectModel = require("../../models/Project");
 const path = require("path");
 const uploadController = new UploadController();
 const video = new videoManipulator();
-const GoogleAPI = new TranscriptionController();
+
 
 
 
@@ -44,10 +44,12 @@ module.exports = () => {
                 videoInput.on("data", (chunk) => {
                     currentChunkSizeA = chunk.length + currentChunkSizeA;
                     percentageA = ((currentChunkSizeA/ req.file.size) * 100)
-                    req.io.to(socketId).emit('audio-extraction', {state: 'start', message: `Converting to WebM : ${percentageA.toFixed(2)}%`});
+                    req.io.to(socketId).emit('audio-extraction', {state: 'start', message: `Converting to mp4 : ${percentageA.toFixed(2)}%`});
                 })
-                const upload = bucket.openUploadStream(`${projectId}.webm`, {
-                        chunkSizeBytes: 40000,
+                videoInput.on("end", () => {
+                    videoInput.close();
+                })
+                const upload = bucket.openUploadStream(`${projectId}.mp4`, {
                         metadata: {
                             projectId: projectId,
                             transcription: wordData,
@@ -68,21 +70,33 @@ module.exports = () => {
                 if(!fs.existsSync(folder)) {
                     fs.mkdirSync(folder)
                 }
-                ffmpeg(videoInput)
-                    .outputFormat('webm')
-                    .on("end", () => {
-                        let currentChunkSize = 0;
-                        let percentage = 0;
-                        const videoupload = fs.createReadStream(path.join(folder, `${projectId}0.webm`));
-                        videoupload.on("data", (chunk) => {
-                            currentChunkSize = chunk.length + currentChunkSize;
-                            percentage = ((currentChunkSize/ req.file.size) * 100)
-                            console.log(percentage);
-                            req.io.to(socketId).emit('audio-extraction', {state: 'start', message: `Uploading  :  ${percentage.toFixed(2)}%`});
-                        })
-                        videoupload.pipe(upload);
+            
+                const saveLocal = fs.createWriteStream(path.join(folder, `${projectId}0.mp4`))
+                videoInput.pipe(saveLocal);
+
+                saveLocal.on("finish", () => {
+                    let currentChunkSize = 0;
+                    let percentage = 0;
+
+                    const videoupload = fs.createReadStream(path.join(folder, `${projectId}0.mp4`));
+                    videoupload.on("data", (chunk) => {
+                        currentChunkSize = chunk.length + currentChunkSize;
+                        percentage = ((currentChunkSize/ req.file.size) * 100)
+                        console.log(percentage);
+                        req.io.to(socketId).emit('audio-extraction', {state: 'start', message: `Uploading  :  ${percentage.toFixed(2)}%`});
                     })
-                    .save(`temp/${projectId}/${projectId}0.webm`);
+                    videoupload.on("end", () => {
+                        videoupload.close();
+                    })
+                    videoupload.pipe(upload);
+                })
+
+                saveLocal.on("error" , (error) => {
+                    console.log("Error in saving in locals", error);
+                })
+                saveLocal.on("end", () => {
+                    saveLocal.close();
+                })
                 
                 
                 await new Promise((resolve, reject) => {
@@ -117,6 +131,7 @@ module.exports = () => {
 
         let transcribe;
         try {
+            const GoogleAPI = new TranscriptionController();
             transcribe = GoogleAPI.speechToText(transcribeCallbackEnd );
         } catch (error) {
             res.status(400).json({status: "fail", message: "Failed to transcript the file."});
@@ -131,20 +146,25 @@ module.exports = () => {
             return;
         }
 
-        video.extractAudio(videoFile, transcribe, (error) => {
-            if(error){
-                res.status(400).json({status: "fail", message: "Failed to extract the audio."})
-                return;
-            }else {
-                req.io.to(socketId).emit('audio-extraction', 'finish');
-            }
-        },(metadata) => {
-            if(metadata) {
-                console.log(metadata);
-                bitrate = metadata.bitrate;
-                duration = metadata.duration;
-            }
-        });
+        try {
+            video.extractAudio(videoFile, transcribe, (error) => {
+                if(error){
+                    res.status(400).json({status: "fail", message: "Failed to extract the audio."})
+                    return;
+                }else {
+                    req.io.to(socketId).emit('audio-extraction', 'finish');
+                }
+            },(metadata) => {
+                if(metadata) {
+                    console.log(metadata);
+                    bitrate = metadata.bitrate;
+                    duration = metadata.duration;
+                }
+            });
+        } catch (error) {
+            res.status(400).json({status: "fail", message: "Failed to transcript the file."});
+            console.log("Error in transcription: ", error);
+        }
 
     });
 

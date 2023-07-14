@@ -19,6 +19,7 @@ const initialState = {
     isVerifying: false,
     verified: false,
     initialInformation: "",
+    isShowAssets: false,
 }
 
 export const EditingPageReducer = (state = initialState, action) => {
@@ -77,6 +78,11 @@ export const EditingPageReducer = (state = initialState, action) => {
             return {
                 ...state,
                 verified: action.payload,
+            }
+        case "SET_SHOW_ASSETS":
+            return {
+                ...state,
+                isShowAssets: action.payload,
             }
         case "RESET_STATE":
             return initialState;

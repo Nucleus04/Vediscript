@@ -10,19 +10,20 @@ function ProfileComponent () {
     const showProfileModal = () => {
         setIsProfileShowing(!isProfileShowing);
     }
-
     const logout = () => {
         localStorage.clear();
         navigate("/authentication");
     }
-
+    const handleMouseLeave = () => {
+        setIsProfileShowing(false);
+    }
     return (
         <div className="profile-component">
             <button onClick = {showProfileModal} className="profile">
                 <p>{firstLetter}</p>
             </button>
 
-            <div className={`profile-modal ${isProfileShowing? "": "display-none"}`}>
+            <div className={`profile-modal ${isProfileShowing? "": "display-none"}`} onMouseLeave={handleMouseLeave}>
                 <div className="userinfo-container">
                     <p className="account-name">{user.name}</p>
                     <p className="account-email">{user.email}</p>

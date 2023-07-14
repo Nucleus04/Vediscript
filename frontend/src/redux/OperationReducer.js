@@ -1,4 +1,5 @@
 
+
 const initialState = {
     isRemovingAudio: false,
     isReplacingAudio: false,
@@ -10,7 +11,16 @@ const initialState = {
     initialRemovingData:{
         start:"",
         end:"",
-    }
+    },
+    isHighlighting: {
+        color: "",
+        state: false,
+    },
+    isInserting: {
+        state:false,
+        endTime:"",
+    },
+    isReplacingViaLocal: false,
 }
 
 export const OperationReducer = (state = initialState, action) => {
@@ -39,6 +49,21 @@ export const OperationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isShowRecordComponent: action.payload,
+            }
+        case "SET_IS_HIGHLIGHTING":
+            return {
+                ...state,
+                isHighlighting: action.payload,
+            }
+        case "SET_IS_REPLACING_VIA_LOCAL":
+            return {
+                ...state,
+                isReplacingViaLocal: action.payload,
+            }
+        case "SET_IS_INSERTING":
+            return {
+                ...state,
+                isInserting: action.payload,
             }
         case "RESET_STATE_OPERATION":
             return initialState;

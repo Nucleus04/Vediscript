@@ -1,5 +1,5 @@
 import "./style.css";
-import ImportAudioComponent from "./components/ImportAudioComponent";
+import ImportAudioComponent from "./components/Import/ImportAudioComponent";
 import ReplaceAudioComponent from "./components/Replace/ReplaceAudioComponent";
 import RemoveAudioComponent from "./components/RemoveAudioComponent";
 import { useEffect, useState } from "react";

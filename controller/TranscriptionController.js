@@ -2,9 +2,6 @@ const config = require("../config");
 const speech = require("@google-cloud/speech");
 const path = require("path");
 
-const client = new speech.SpeechClient({
-    keyFilename: path.join(__dirname, "../GoogleAPI/key.json")
-});
 
 class TranscriptionController {
     constructor () {
@@ -12,14 +9,18 @@ class TranscriptionController {
     }
     speechToText (/*duringCallback,*/ endcallback) {
     
-        const configuration = config.transcription.speech_to_text.config;
-        const request = {
-            config: configuration,
-        };
-
         const wordData = [];
         try {
-            const recognizeStream = client
+            const client = new speech.SpeechClient({
+                keyFilename: path.join(__dirname, "../GoogleAPI/key.json")
+            });
+            let recognizeStream = null;
+            const configuration = config.transcription.speech_to_text.config;
+            const request = {
+                config: configuration,
+            };
+    
+            recognizeStream = client
             .streamingRecognize(request)
             .on('error', (error) => {
                 throw new Error(error);
@@ -46,10 +47,9 @@ class TranscriptionController {
             .on("end", () => {
                 endcallback(wordData);
             })
-            
             return recognizeStream;
         } catch (error) {
-            throw new Error(error);
+            throw new Error(error)
         }
     }
 }

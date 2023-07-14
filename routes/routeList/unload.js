@@ -48,8 +48,7 @@ module.exports = () => {
                 }
                 let currentVideo = path.join(__dirname, "..","..", "temp",`${projectId}`, `${projectId}${historyIndex}.mp4`);
                 
-                const inputVideo = fs.createReadStream(path.join(__dirname, "..","..", "temp",`${projectId}`, `${projectId}${historyIndex}.mp4`))
-                if(req.body.operation !== "SAVE" && req.body.operation !== "DOWNLOAD"){
+                if(req.body.operation === "EXIT"){
                     files.forEach(file => {
                         console.log(file);
                         const filePath = path.join(directory, file);
@@ -64,11 +63,20 @@ module.exports = () => {
                     if(numberOfChanges > 1){
                         try {
                             if(req.body.operation === "RELOAD"){
-                                fs.renameSync(currentVideo, path.join(__dirname, "..","..", "temp",`${projectId}`, `${projectId}0.mp4`))
+                                files.forEach(file => {
+                                    console.log(file);
+                                    const filePath = path.join(directory, file);
+                                
+                                    if (filePath !== path.join(__dirname, "..","..", "temp",`${projectId}`, `${projectId}0.mp4`)) {
+                                        fs.removeSync(filePath);
+                                        console.log('File deleted: ', filePath)
+                                    }
+                                });
                             }
                             else if(req.body.operation === "EXIT" || req.body.operation === "SAVE"){
                                 console.log(`I will upload ${projectId}${historyIndex}.mp4`);
                                 req.io.to(req.body.socketId).emit('saving', {state: "start"});
+                                const inputVideo = fs.createReadStream(path.join(__dirname, "..","..", "temp",`${projectId}`, `${projectId}${historyIndex}.mp4`))
                                 inputVideo.on("end", () => {
                                     inputVideo.destroy();
                                 })

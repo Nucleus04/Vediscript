@@ -6,8 +6,12 @@ const path = require("path");
 
 
 module.exports = () => {
+    let activeReadStream = null;
     router.post("/", async(req, res) => {
         try {
+            if (activeReadStream) {
+                activeReadStream.destroy();
+            }
             req.io.to(req.body.socketId).emit('retrieving-project', {state: true, message: 'Retriving project...'});
             const historyIndex = req.body.historyIndex;
             const bucket = GridFS((error) => {
@@ -15,7 +19,6 @@ module.exports = () => {
             });
             const cursor = await bucket.find({"metadata.projectId": req.body.projectDetails._id});
             let data = [];
-            const downloadvideo =  bucket.openDownloadStreamByName(`${req.body.projectDetails._id}.mp4`);
             if(await cursor.hasNext()){
                 for await(const element of cursor) {
                     data.push(element);
@@ -33,6 +36,8 @@ module.exports = () => {
                         fs.mkdirSync(folder)
                     }
                     const writeStream = fs.createWriteStream(path.join(folder, `${req.body.projectDetails._id}${historyIndex}.mp4`));
+                    console.log("I will now download");
+                    const downloadvideo =  bucket.openDownloadStreamByName(`${req.body.projectDetails._id}.mp4`);
                     downloadvideo.pipe(writeStream);
                     
                     writeStream.on('finish', () => {
@@ -67,6 +72,7 @@ module.exports = () => {
                     for(let i = 0; i<audiofiles.length; i++){
                         const output = fs.createWriteStream(path.join(__dirname, "..","..", "temp",`${req.body.projectDetails._id}-audio`, `${audiofiles[i].metadata.name}`));
                         const input = bucket.openDownloadStream(audiofiles[i]._id);
+                        activeReadStream = output;
                         let folder = path.join(__dirname, "..","..", "temp",`${req.body.projectDetails._id}-audio`);
                         if(!fs.existsSync(folder)) {
                             fs.mkdirSync(folder)
